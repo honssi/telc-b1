@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>telc B1 스프린트</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand">TELC B1 스프린트</div>
+  <div class="top-right">
+    <span id="dday" class="chip"></span>
+    <span id="streak" class="chip">연속 0일</span>
+  </div>
+</header>
+
+<main id="screen"></main>
+
+<nav id="tabbar">
+  <button data-tab="home" class="active">홈</button>
+  <button data-tab="vocab">단어</button>
+  <button data-tab="deck">찍기</button>
+  <button data-tab="grammar">문법</button>
+  <button data-tab="settings">설정</button>
+</nav>
+
+<script src="data.js"></script>
+<script src="grammar.js"></script>
+<script src="declension.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
