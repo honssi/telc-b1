@@ -426,7 +426,7 @@ function renderVocabHub() {
     </div>
     <div class="panel">
       <h2>3 · 단어 시험</h2>
-      <p class="sub">오늘 공부한 단어에서 출제 · 틀린 단어는 복습 카드로 자동 추가</p>
+      <p class="sub">오늘 단어 전부 + 이전에 외운 단어 10개 복습 · 틀리면 복습 카드로 자동 추가</p>
       <div class="grade-row" style="margin-top:12px">
         <button class="g-again" id="t-de">독일어 → 한국어</button>
         <button class="g-again" id="t-ko">한국어 → 독일어</button>
@@ -481,11 +481,16 @@ function renderVocabList() {
 // ---------- 단어 테스트 (독↔한 4지선다) ----------
 let vt = null;
 function startVocabTest(dir) {
-  // 오늘 공부한 단어 우선 출제, 부족하면 배운 단어 전체 → 전체 단어
-  let pool = todaysWordIds().map(id => VOCAB.find(v => v.id === id)).filter(Boolean);
+  // 오늘 공부한 단어는 전부 출제 + 이전에 배운 단어 10개를 복습으로 섞음
+  const todayIds = todaysWordIds();
+  let pool = todayIds.map(id => VOCAB.find(v => v.id === id)).filter(Boolean);
+  const older = shuffle(
+    VOCAB.filter(v => S.introduced.includes(v.id) && !todayIds.includes(v.id))
+  ).slice(0, 10);
+  pool = [...pool, ...older];
   if (pool.length < 4) pool = VOCAB.filter(v => S.introduced.includes(v.id));
-  if (pool.length < 4) pool = [...VOCAB];
-  const qs = shuffle([...pool]).slice(0, 10);
+  if (pool.length < 4) pool = [...VOCAB].slice(0, 20);
+  const qs = shuffle([...new Set(pool)]);
   vt = {dir, qs, pos: 0, correct: 0, wrong: []};
   nextVocabTestQ();
 }
@@ -912,13 +917,13 @@ function renderGrammarDetail(gid, backToLesson) {
 }
 
 function startQuiz(g, mode) {
-  // 이번 레슨 5문제 + 이전에 배운 레슨에서 복습 3문제를 섞어서 출제
+  // 이번 레슨 10문제 + 이전에 배운 레슨에서 복습 5문제를 섞어서 출제
   // (한 문법만 연달아 나오면 패턴으로 답을 찍게 되니까)
   const list = g.quiz.map((q, i) => ({g, qi: i}));
   const reviewPool = [];
   GRAMMAR.filter(x => x.id !== g.id && S.grammarDone.includes(x.id))
     .forEach(x => x.quiz.forEach((q, i) => reviewPool.push({g: x, qi: i})));
-  const review = shuffle(reviewPool).slice(0, 3);
+  const review = shuffle(reviewPool).slice(0, 5);
   qz = {list: shuffle([...list, ...review]), pos: 0, correct: 0, mode, lesson: g};
   nextQuizQ();
 }
