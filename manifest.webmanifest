@@ -1,0 +1,9 @@
+{
+  "name": "telc B1 스프린트",
+  "short_name": "telc B1",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f5f7",
+  "theme_color": "#2f5fe0",
+  "icons": []
+}
