@@ -325,4 +325,61 @@ const GRAMMAR = [
      {q:"Vergiss nicht, die Tür ___! (abschließen)", opts:["abzuschließen", "zu abschließen", "abschließen zu"], why:"분리동사: 접두사 + zu + 어간 → abzuschließen"},
      {q:"Du musst heute nicht ___. (kommen)", opts:["kommen", "zu kommen", "gekommen"], why:"조동사(müssen) 뒤에는 zu 없이 원형!"}
    ]},
+
+  {id:"g24", title:"과거 가정: hätte/wäre + 과거분사", rule:"이미 지나간 일을 '~했더라면/~했을 텐데'라고 아쉬워할 때 쓴다.<br>공식: <mark>hätte/wäre + 과거분사</mark> (Perfekt의 haben/sein 규칙 그대로!).<br>Es hätte dir Spaß gemacht.(너도 재밌었을 텐데 — 실제론 안 왔음)<br>Ich wäre gern gekommen.(가고 싶었는데 — 못 갔음)", tip:"★ 지나간 일에 대한 아쉬움이면 → <mark>hätte/wäre + 과거분사</mark>! haben동사면 hätte, sein동사(이동·변화)면 wäre!",
+   detail:"<b>현재 가정 vs 과거 가정</b><br>· 현재: Wenn ich Zeit <mark>hätte</mark>, würde ich kommen. (시간이 있다면 — 지금)<br>· 과거: Wenn ich Zeit <mark>gehabt hätte</mark>, wäre ich gekommen. (시간이 있었더라면 — 이미 지남)<br><br><b>★ 만드는 법</b><br>Perfekt에서 haben/sein만 접속법으로 바꾼다:<br>· habe gemacht → <mark>hätte gemacht</mark> (~했을 텐데)<br>· bin gekommen → <mark>wäre gekommen</mark> (~왔을 텐데)<br><br><b>시험 단골 표현</b><br>· Es <mark>hätte</mark> dir bestimmt Spaß <mark>gemacht</mark>. (너도 분명 재밌었을 텐데)<br>· Ich <mark>wäre</mark> gern <mark>gekommen</mark>. (가고 싶었는데)<br>· Das <mark>hättest</mark> du mir sagen können! (말해 줄 수 있었잖아!)<br><br><span class='warn'>함정:</span> haben/sein 선택은 Perfekt와 똑같다. gehen(이동)이니까 wäre gegangen, machen이니까 hätte gemacht!",
+   quiz:[
+     {q:"Schade, dass du nicht kommen ___. (올 수 없었지)", opts:["konntest","könntest","kannst"], why:"실제 과거 사실 → konntest (가정 아님!)"},
+     {q:"Es ___ dir bestimmt Spaß gemacht.", opts:["hätte","hatte","würde"], why:"과거 가정(왔더라면 재밌었을 텐데) → hätte + gemacht"},
+     {q:"Ich ___ gern zu deiner Party gekommen.", opts:["wäre","hätte","würde"], why:"kommen은 sein동사 → wäre gekommen"},
+     {q:"Wenn ich das gewusst ___, hätte ich dir geholfen.", opts:["hätte","habe","hatte"], why:"과거 가정 wenn절 → gewusst hätte"},
+     {q:"Ohne dich ___ ich die Prüfung nicht bestanden.", opts:["hätte","wäre","würde"], why:"bestehen은 haben동사 → hätte bestanden"},
+     {q:"Wir ___ fast den Zug verpasst!", opts:["hätten","wären","würden"], why:"verpassen은 haben동사 → hätten verpasst"},
+     {q:"Das ___ du mir früher sagen können!", opts:["hättest","hast","würdest"], why:"'말할 수 있었잖아!' 과거 가정 → hättest ... können"},
+     {q:"Ich ___ beinahe eingeschlafen.", opts:["wäre","hätte","würde"], why:"einschlafen은 sein동사 → wäre eingeschlafen"},
+     {q:"An deiner Stelle ___ ich das Angebot angenommen.", opts:["hätte","habe","wäre"], why:"annehmen은 haben동사 → hätte angenommen"},
+     {q:"Wenn das Wetter besser gewesen ___, wären wir gewandert.", opts:["wäre","hätte","ist"], why:"sein의 과거 가정 → gewesen wäre"}
+   ]},
+  {id:"g25", title:"wann vs wenn vs als — 헷갈림 종결", rule:"셋 다 한국어로 '~때'로 번역돼서 최악의 함정이다.<br><mark>wann</mark> = 언제?(질문·간접의문) / <mark>wenn</mark> = ~하면·~할 때마다(조건·반복) / <mark>als</mark> = 과거의 딱 한 번.<br>Weißt du, wann er kommt?(언제 오는지) · Wenn er kommt, essen wir.(오면) · Als er kam, ...(왔을 때)", tip:"★ '언제'라고 물을 수 있으면 → <mark>wann</mark>! 조건·반복이면 → <mark>wenn</mark>! 과거 한 번이면 → <mark>als</mark>!",
+   detail:"<b>구분 3단계</b><br>① 시간을 묻는 질문인가? (직접·간접 모두) → <mark>wann</mark><br>&nbsp;&nbsp;Wann beginnt der Kurs? · Ich weiß nicht, <mark>wann</mark> der Kurs beginnt.<br>② 조건이거나 반복되는 일인가? → <mark>wenn</mark><br>&nbsp;&nbsp;<mark>Wenn</mark> es regnet, bleibe ich zu Hause. (비가 오면 — 조건)<br>&nbsp;&nbsp;Immer <mark>wenn</mark> ich ihn sehe, lacht er. (볼 때마다 — 반복)<br>③ 과거에 딱 한 번 있었던 일인가? → <mark>als</mark><br>&nbsp;&nbsp;<mark>Als</mark> ich 20 war, ... · <mark>Als</mark> wir in Berlin ankamen, ...<br><br><b>비슷한 친구들</b><br>· <mark>falls</mark> = wenn(만약)의 격식 버전: Falls Sie Interesse haben, ...<br>· <mark>bis</mark> = ~할 때까지: Warte, bis ich komme.<br>· <mark>sobald</mark> = ~하자마자: Sobald ich mehr weiß, melde ich mich.<br><br><span class='warn'>최대 함정:</span> 간접의문문의 wann! 'Ich frage ihn, wann er Zeit hat'에서 wenn을 고르면 뜻이 달라진다(시간이 있으면 물어본다?!). '언제인지'로 해석되면 무조건 wann!",
+   quiz:[
+     {q:"Weißt du, ___ der Film beginnt?", opts:["wann","wenn","als"], why:"'언제 시작하는지' 간접의문 → wann"},
+     {q:"___ ich müde bin, trinke ich Kaffee.", opts:["Wenn","Wann","Als"], why:"조건·반복(피곤하면) → wenn"},
+     {q:"___ ich gestern nach Hause kam, war niemand da.", opts:["Als","Wenn","Wann"], why:"과거 한 번의 일 → als"},
+     {q:"Ich frage sie, ___ sie Zeit hat.", opts:["wann","wenn","ob"], why:"'언제 시간 있는지' → wann"},
+     {q:"___ Sie Interesse haben, melden Sie sich bitte.", opts:["Falls","Als","Wann"], why:"만약 관심 있으시면(조건·격식) → falls"},
+     {q:"Immer ___ es regnet, habe ich Kopfschmerzen.", opts:["wenn","wann","als"], why:"immer wenn = ~할 때마다"},
+     {q:"Warte hier, ___ ich zurückkomme!", opts:["bis","wann","als"], why:"돌아올 때까지 → bis"},
+     {q:"___ wir jung waren, gab es kein Internet.", opts:["Als","Wenn","Wann"], why:"과거의 한 시기 → als"},
+     {q:"Ich melde mich, ___ ich in Frankfurt ankomme.", opts:["sobald","wann","als"], why:"도착하자마자 → sobald"},
+     {q:"Seit ___ lernst du Deutsch?", opts:["wann","wenn","als"], why:"Seit wann? = 언제부터?"}
+   ]},
+  {id:"g26", title:"werden의 3가지 얼굴: 미래/수동/되다", rule:"시험은 wird·wurde·würde·worden을 보기로 나란히 놓는다.<br>① <mark>werden + 원형</mark> = 미래·추측(~할 것이다)<br>② <mark>werden + 과거분사</mark> = 수동(~되다)<br>③ <mark>werden + 형용사/명사</mark> = ~이 되다<br>④ <mark>würde + 원형</mark> = ~할 텐데(가정)", tip:"★ 문장 끝을 봐라: 원형이면 → 미래(wird kommen)! 과거분사면 → 수동(wird operiert)! 점 두 개 würde는 → 가정!",
+   detail:"<b>네 형태를 한 문장씩</b><br>· 미래: Ich <mark>werde</mark> einen Gips <mark>bekommen</mark>. (깁스를 하게 될 거야 — 원형!)<br>· 수동 현재: Das Bein <mark>wird</mark> morgen <mark>operiert</mark>. (수술된다 — 과거분사!)<br>· 수동 과거: Ich <mark>wurde</mark> gestern <mark>operiert</mark>. (수술받았다)<br>· ~이 되다: Es <mark>wird</mark> kalt. · Sie <mark>wird</mark> Ärztin. (형용사/직업)<br>· 가정: Ich <mark>würde</mark> gern kommen. (가고 싶은데)<br><br><b>★ wurde vs würde vs worden (시험 최애 3형제)</b><br>· <mark>wurde</mark> = 실제 과거 수동/되었다: Das Haus wurde 1990 gebaut.<br>· <mark>würde</mark> = 가정: Ich würde das nicht machen.<br>· <mark>worden</mark> = 완료 수동의 끝: Das Haus ist gebaut <mark>worden</mark>. (ist...worden 세트!)<br><br><span class='warn'>함정:</span> geworden은 '~이 되었다'의 완료(Er ist Arzt geworden), worden은 수동 완료 전용. ist + 과거분사 + ___ 빈칸엔 worden!",
+   quiz:[
+     {q:"Ich ___ nächste Woche operiert.", opts:["werde","wurde","worden"], why:"다음 주(미래) 수동 → werde operiert"},
+     {q:"Mein Fahrrad ___ gestern gestohlen.", opts:["wurde","würde","werde"], why:"어제 실제로 일어난 수동 → wurde"},
+     {q:"Ich ___ das an deiner Stelle nicht machen.", opts:["würde","wurde","werde"], why:"가정(나라면 안 할 텐데) → würde"},
+     {q:"Das Paket ist gestern geliefert ___.", opts:["worden","geworden","werden"], why:"ist + PP + worden = 완료 수동"},
+     {q:"Es ___ langsam dunkel.", opts:["wird","wurde","würde"], why:"~이 되다(어두워진다) → wird + 형용사"},
+     {q:"Er ist letztes Jahr Vater ___.", opts:["geworden","worden","werden"], why:"'~이 되었다'의 완료 → ist ... geworden"},
+     {q:"Du ___ sehen, alles wird gut!", opts:["wirst","würdest","wurdest"], why:"미래·확신 → wirst sehen"},
+     {q:"Die Rechnung ___ schon bezahlt. (이미 됐음)", opts:["wurde","würde","werden"], why:"과거 수동 → wurde bezahlt"},
+     {q:"___ Sie mir bitte helfen? (정중)", opts:["Würden","Wurden","Werden Sie nicht"], why:"정중한 부탁 → Würden Sie ...?"},
+     {q:"Das Zimmer ___ jeden Tag geputzt.", opts:["wird","ist","hat"], why:"매일 반복되는 수동 → wird geputzt"}
+   ]},
+  {id:"g27", title:"글 연결어: außerdem·vor allem·dennoch·sonst", rule:"Teil 2 단어박스의 단골손님들. 글의 흐름을 잇는 부사들이다.<br><mark>außerdem</mark>(게다가) · <mark>vor allem</mark>(무엇보다) · <mark>zum Schluss</mark>(마지막으로) · <mark>dennoch</mark>(그런데도) · <mark>sonst</mark>(안 그러면) · <mark>deswegen</mark>(그래서)", tip:"★ 추가 정보면 → <mark>außerdem</mark>! 강조면 → <mark>vor allem</mark>! 반전이면 → <mark>dennoch</mark>! 경고·조건이면 → <mark>sonst</mark>!",
+   detail:"<b>기능별로 묶어서 외우기</b><br><br><b>① 추가 (그리고 또)</b><br>· <mark>außerdem</mark>(게다가): Die Wohnung ist groß. Außerdem hat sie einen Balkon.<br>· auch(~도) · dazu(거기에 더해)<br><br><b>② 강조 (특히)</b><br>· <mark>vor allem</mark>(무엇보다): Vor allem die Kinder freuen sich.<br>· besonders(특히)<br><br><b>③ 순서 (글의 뼈대)</b><br>· zuerst(먼저) → dann/danach(그다음) → <mark>zum Schluss</mark>(마지막으로)<br><br><b>④ 반전 (그런데도)</b><br>· <mark>dennoch</mark> = trotzdem(그럼에도): Es war teuer. Dennoch habe ich es gekauft.<br><br><b>⑤ 경고 (안 그러면)</b><br>· <mark>sonst</mark>: Beeil dich, <mark>sonst</mark> verpasst du den Zug! (서둘러, 안 그러면 놓쳐!)<br><br><b>⑥ 결과 (그래서)</b><br>· <mark>deswegen</mark> = deshalb = darum: Ich war krank, deswegen bin ich zu Hause geblieben.<br><br><b>⑦ 짝꿍 접속사</b><br>· <mark>entweder ... oder</mark>(~이거나 ~이거나): Entweder kommst du mit, oder du bleibst hier.<br>· zwar ... aber(~이긴 하지만): Es ist zwar teuer, aber gut.<br><br><span class='warn'>어순 주의:</span> 이 부사들이 문장 맨 앞에 오면 동사가 바로 뒤! Außerdem <u>hat</u> sie ...",
+   quiz:[
+     {q:"Die Wohnung ist schön. ___ ist sie ganz zentral.", opts:["Außerdem","Sonst","Dennoch"], why:"장점 추가 → außerdem(게다가)"},
+     {q:"___ die Kinder freuen sich auf den Ausflug.", opts:["Vor allem","Zum Schluss","Sonst"], why:"특히 강조 → vor allem"},
+     {q:"Beeil dich, ___ verpasst du den Bus!", opts:["sonst","außerdem","deswegen"], why:"안 그러면(경고) → sonst"},
+     {q:"Es hat geregnet. ___ sind wir spazieren gegangen.", opts:["Dennoch","Deswegen","Außerdem"], why:"반전(그런데도) → dennoch"},
+     {q:"Ich war krank, ___ konnte ich nicht kommen.", opts:["deswegen","dennoch","vor allem"], why:"이유→결과 → deswegen"},
+     {q:"Zuerst frühstücken wir, dann packen wir, und ___ fahren wir los.", opts:["zum Schluss","vor allem","sonst"], why:"순서의 마지막 → zum Schluss"},
+     {q:"___ kommst du mit, oder du bleibst zu Hause.", opts:["Entweder","Außerdem","Dennoch"], why:"entweder ... oder = ~이거나 ~이거나"},
+     {q:"Das Hotel war ___ teuer, aber sehr gut.", opts:["zwar","sonst","dennoch"], why:"zwar ... aber = ~이긴 하지만"},
+     {q:"Nimm einen Schirm mit, ___ wirst du nass!", opts:["sonst","deswegen","zwar"], why:"안 그러면 젖어! → sonst"},
+     {q:"Der Kurs ist gut. ___ lernt man dort viele Leute kennen.", opts:["Außerdem","Entweder","Zwar"], why:"추가 장점 → außerdem"}
+   ]},
 ];
