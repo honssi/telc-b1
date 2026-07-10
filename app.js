@@ -479,6 +479,41 @@ function renderVocabList() {
 }
 
 // ---------- 단어 테스트 (독↔한 4지선다) ----------
+// 품사 분류: 보기를 같은 품사로만 구성하기 위해
+function wordClass(w) {
+  const first = w.de.split(" ")[0];
+  if (first === "der" || first === "die" || first === "das") return "noun";
+  const koHead = w.ko.split(/[,;·(]/)[0].trim();
+  if (koHead.endsWith("다") && (w.de.indexOf(" ") === -1 || w.de.startsWith("sich "))) return "verb";
+  return "other";
+}
+
+// 오답 보기 뽑기: 같은 품사 + 비슷하게 생긴 단어 우선 (시험답게 어렵게)
+function pickDistractors(w, d) {
+  const cls = wordClass(w);
+  const answerText = d === "de2ko" ? w.ko : w.de;
+  let cands = VOCAB.filter(x => x.id !== w.id
+    && (d === "de2ko" ? x.ko : x.de) !== answerText   // 정답과 똑같은 표기는 제외
+    && wordClass(x) === cls);
+  if (cands.length < 3) cands = VOCAB.filter(x => x.id !== w.id);
+  // 비슷함 점수: 같은 접두사/어미(독일어), 같은 첫 글자, 비슷한 길이
+  const scored = shuffle(cands).map(x => {
+    const s = d === "de2ko" ? x.ko : x.de;
+    let score = 0;
+    if (d === "ko2de") {
+      if (s.slice(0, 3) === answerText.slice(0, 3)) score += 3;  // ver-/be-/auf- 같은 접두
+      if (s.slice(-3) === answerText.slice(-3)) score += 2;      // 같은 어미
+      if (s[0] === answerText[0]) score += 1;
+    } else {
+      if (s[0] === answerText[0]) score += 2;                    // 같은 첫 글자(한국어)
+      if (Math.abs(s.length - answerText.length) <= 2) score += 1;
+    }
+    return {x, score};
+  }).sort((a, b) => b.score - a.score);
+  // 상위 8개 중 3개 (매번 조금씩 다르게)
+  return shuffle(scored.slice(0, 8)).slice(0, 3).map(o => o.x);
+}
+
 let vt = null;
 function startVocabTest(dir) {
   // 오늘 공부한 단어는 전부 출제 + 이전에 배운 단어 10개를 복습으로 섞음
@@ -502,7 +537,7 @@ function nextVocabTestQ() {
   const promptText = d === "de2ko" ? w.de : w.ko;
   const answerOf = x => d === "de2ko" ? x.ko : x.de;
   // 오답 보기 3개: 같은 방향의 다른 단어들
-  const others = shuffle(VOCAB.filter(x => x.id !== w.id)).slice(0, 3);
+  const others = pickDistractors(w, d);
   const opts = shuffle([{t: answerOf(w), ok: true}, ...others.map(x => ({t: answerOf(x), ok: false}))]);
   const abc = ["a", "b", "c", "d"];
   backFn = () => setTab("vocab");
