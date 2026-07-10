@@ -7,6 +7,8 @@
   --sub: #767676;
   --line: #e5e5e5;
   --soft: #f2f2f2;
+  --good: #189e57;   /* 정답 초록 (시험 피드백 전용) */
+  --bad: #d64040;    /* 오답 빨강 (시험 피드백 전용) */
   --radius: 14px;
 }
 
@@ -247,8 +249,10 @@ body {
 .drill-input.no { background: var(--soft); text-decoration: line-through; color: var(--sub); }
 
 .feedback { margin-top: 14px; border-radius: 10px; padding: 14px 16px; font-size: 0.95rem; line-height: 1.6; }
-.feedback.ok { background: var(--ink); color: #fff; font-weight: 700; }
-.feedback.no { background: var(--card); border: 1px solid var(--ink); }
+.feedback.ok { background: var(--good); color: #fff; font-weight: 700; }
+.feedback.ok .note { color: rgba(255,255,255,0.85); border-top-color: rgba(255,255,255,0.4); }
+.feedback.no { background: var(--card); border: 2px solid var(--bad); }
+.feedback.no .label { color: var(--bad); }
 .feedback .label {
   display: inline-block;
   font-size: 0.72rem;
@@ -439,9 +443,10 @@ u { text-decoration-thickness: 2px; text-underline-offset: 2px; }
   flex-shrink: 0;
 }
 .opt:active { background: var(--soft); }
-.opt.right { background: var(--ink); color: #fff; }
-.opt.right .abc { border-color: #fff; }
-.opt.wrong { background: var(--soft); color: var(--sub); text-decoration: line-through; }
+.opt.right { background: var(--good); border-color: var(--good); color: #fff; }
+.opt.right .abc { border-color: #fff; color: #fff; }
+.opt.wrong { background: var(--bad); border-color: var(--bad); color: #fff; }
+.opt.wrong .abc { border-color: #fff; color: #fff; }
 .opt:disabled { cursor: default; }
 
 /* ---------- done screen ---------- */
