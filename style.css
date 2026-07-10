@@ -4,7 +4,7 @@
   --bg: #fafafa;
   --card: #ffffff;
   --ink: #111111;
-  --sub: #767676;
+  --sub: #5c5c5c;
   --line: #e5e5e5;
   --soft: #f2f2f2;
   --good: #189e57;   /* 정답 초록 (시험 피드백 전용) */
@@ -96,7 +96,7 @@ body {
   color: var(--sub);
   margin-bottom: 16px;
 }
-.panel .sub { color: var(--sub); font-size: 0.88rem; line-height: 1.6; }
+.panel .sub { color: var(--sub); font-size: 0.93rem; line-height: 1.6; }
 
 .task-row {
   display: flex;
@@ -110,7 +110,7 @@ body {
 .task-name { font-weight: 800; font-size: 1.02rem; }
 .mini-wrap { background: var(--soft); border-radius: 999px; height: 4px; overflow: hidden; margin-top: 8px; }
 .mini-bar { background: var(--ink); height: 100%; border-radius: 999px; transition: width 0.3s; }
-.task-detail { color: var(--sub); font-size: 0.84rem; margin-top: 3px; }
+.task-detail { color: var(--sub); font-size: 0.9rem; margin-top: 3px; }
 .task-done { color: var(--ink); font-weight: 700; font-size: 0.88rem; border-bottom: 2px solid var(--ink); }
 
 .btn {
@@ -161,10 +161,10 @@ body {
   cursor: pointer;
 }
 .flashcard .de { font-size: 2.3rem; font-weight: 800; letter-spacing: -0.02em; }
-.flashcard .plural { color: var(--sub); font-size: 0.95rem; }
+.flashcard .plural { color: var(--sub); font-size: 1.12rem; font-weight: 600; }
 .flashcard .ko { font-size: 1.3rem; font-weight: 700; }
 .flashcard .example { font-size: 1rem; line-height: 1.6; color: var(--ink); }
-.flashcard .example .exko { color: var(--sub); font-size: 0.88rem; display: block; margin-top: 2px; }
+.flashcard .example .exko { color: var(--sub); font-size: 0.95rem; display: block; margin-top: 3px; }
 .flashcard .hint { color: #bbbbbb; font-size: 0.82rem; margin-top: 12px; }
 .badge-new {
   border: 1px solid var(--ink);
@@ -212,7 +212,7 @@ body {
 }
 .swipe-tag.left { left: 22px; transform: rotate(-8deg); }
 .swipe-tag.right { right: 22px; transform: rotate(8deg); background: var(--ink); color: #fff; }
-.hint-line { text-align: center; color: var(--sub); font-size: 0.82rem; margin-top: 12px; }
+.hint-line { text-align: center; color: var(--sub); font-size: 0.9rem; margin-top: 12px; }
 
 .grade-row { display: flex; gap: 10px; margin-top: 14px; }
 .grade-row button {
@@ -262,7 +262,7 @@ body {
   margin-bottom: 4px;
 }
 .feedback .correct { font-weight: 800; font-size: 1.08rem; display: block; }
-.feedback .note { color: var(--sub); font-size: 0.85rem; margin-top: 8px; display: block; border-top: 1px solid var(--line); padding-top: 8px; }
+.feedback .note { color: var(--sub); font-size: 0.93rem; margin-top: 8px; display: block; border-top: 1px solid var(--line); padding-top: 8px; }
 
 .umlaut-row { display: flex; gap: 8px; margin-top: 10px; }
 .umlaut-row button {
@@ -299,7 +299,7 @@ body {
 .gram-ex { padding: 12px 2px; border-bottom: 1px solid var(--line); cursor: pointer; }
 .gram-ex:last-child { border-bottom: none; }
 .gram-ex .gde { font-weight: 700; font-size: 1.02rem; }
-.gram-ex .gko { color: var(--sub); font-size: 0.86rem; margin-top: 3px; }
+.gram-ex .gko { color: var(--sub); font-size: 0.94rem; margin-top: 3px; }
 .gram-tip {
   margin-top: 16px;
   border-top: 2px solid var(--ink);
@@ -494,7 +494,26 @@ u { text-decoration-thickness: 2px; text-underline-offset: 2px; }
   margin-left: 8px;
   vertical-align: 2px;
 }
-.vgr { color: var(--sub); font-size: 0.82rem; margin-top: 2px; }
-.vko { font-size: 0.95rem; margin-top: 3px; }
-.vex { font-size: 0.9rem; margin-top: 8px; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 8px; }
-.vex .exko { color: var(--sub); display: block; font-size: 0.84rem; }
+.vgr { color: var(--sub); font-size: 0.95rem; margin-top: 3px; }
+.vko { font-size: 1.02rem; margin-top: 4px; }
+.vex { font-size: 0.98rem; margin-top: 8px; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 8px; }
+.vex .exko { color: var(--sub); display: block; font-size: 0.92rem; }
+
+
+/* ---------- 노트북/데스크톱 (17인치 그램 등 넓은 화면) ---------- */
+@media (min-width: 1100px) {
+  html { font-size: 19px; }             /* rem 기반 글씨 전체 확대 */
+  #screen { max-width: 1000px; padding: 32px 28px; }
+  .panel { padding: 28px 32px; }
+  .flashcard { min-height: 400px; padding: 56px 40px; }
+  .flashcard .de { font-size: 2.8rem; }
+  /* 단어 목록은 2열로 넓게 */
+  .vlist { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .vlist-row { border-bottom: 1px solid var(--line) !important; }
+  .quiz-card, .drill-card, .gram-card { padding: 36px 40px; }
+  #tabbar button { padding: 18px 0 16px; font-size: 0.95rem; }
+}
+@media (min-width: 1500px) {
+  html { font-size: 21px; }
+  #screen { max-width: 1120px; }
+}
