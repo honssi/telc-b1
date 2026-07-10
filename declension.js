@@ -1,36 +1,146 @@
-// 찍기 카드 — 한국어를 보고 독일어를 즉시 말하는 반복 훈련 (매일)
-// [한국어 프롬프트, 정답, 힌트(선택)]
-const DECK = [
-  {cat:"인칭대명사 · 4격 (~를/을)", cards:[
-    ["나를","mich"],["너를","dich"],["그를","ihn"],["그녀를","sie"],["그것을","es"],
-    ["우리를","uns"],["너희를","euch"],["그들을","sie"],["당신을","Sie"]
-  ]},
-  {cat:"인칭대명사 · 3격 (~에게)", cards:[
-    ["나에게","mir"],["너에게","dir"],["그에게","ihm"],["그녀에게","ihr"],["그것에게","ihm"],
-    ["우리에게","uns"],["너희에게","euch"],["그들에게","ihnen"],["당신에게","Ihnen"]
-  ]},
-  {cat:"정관사 · 남성 (der)", cards:[
-    ["남성 1격 (주어)","der"],["남성 2격 (~의)","des"],["남성 3격 (~에게)","dem"],["남성 4격 (~를)","den"]
-  ]},
-  {cat:"정관사 · 여성 (die)", cards:[
-    ["여성 1격 (주어)","die"],["여성 2격 (~의)","der"],["여성 3격 (~에게)","der"],["여성 4격 (~를)","die"]
-  ]},
-  {cat:"정관사 · 중성 (das)", cards:[
-    ["중성 1격 (주어)","das"],["중성 2격 (~의)","des"],["중성 3격 (~에게)","dem"],["중성 4격 (~를)","das"]
-  ]},
-  {cat:"정관사 · 복수 (die)", cards:[
-    ["복수 1격 (주어)","die"],["복수 2격 (~의)","der"],["복수 3격 (~에게)","den"],["복수 4격 (~를)","die"]
-  ]},
-  {cat:"부정관사 · 남성 (ein)", cards:[
-    ["남성 1격 (주어)","ein"],["남성 3격 (~에게)","einem"],["남성 4격 (~를)","einen"]
-  ]},
-  {cat:"부정관사 · 여성 (eine)", cards:[
-    ["여성 1격 (주어)","eine"],["여성 3격 (~에게)","einer"],["여성 4격 (~를)","eine"]
-  ]},
-  {cat:"부정관사 · 중성 (ein)", cards:[
-    ["중성 1격 (주어)","ein"],["중성 3격 (~에게)","einem"],["중성 4격 (~를)","ein"]
-  ]},
-  {cat:"소유관사 mein (남성)", cards:[
-    ["나의 (남성 1격)","mein"],["나의 (남성 3격)","meinem"],["나의 (남성 4격)","meinen"]
-  ]},
+// 관사·어미변화 코스 — 하루 한 주제 로테이션 (설명 → 카드 암기 → 주제 시험)
+// topic = {id, title, rule(핵심), tip(시그널), detail(표·자세한 설명), cards([한국어,독일어]), quiz(10문제, opts[0]=정답)}
+const DECL_COURSE = [
+  {id:"d1", title:"정관사 der / die / das",
+   rule:"명사의 <mark>격(문장 속 역할)</mark>에 따라 정관사가 변한다.<br>1격 주어(은/는/이/가) · 2격 소유(~의) · 3격 간접목적(~에게) · 4격 직접목적(~을/를).",
+   tip:"★ 남성만 4격에서 변한다(der→<mark>den</mark>)! ★ 3격은 남·중 <mark>dem</mark>, 여성 <mark>der</mark>, 복수 <mark>den</mark>(+명사 -n)!",
+   detail:"<b>정관사 전체 표 (독일어의 절반은 이 표다)</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;남성 / 여성 / 중성 / 복수<br>1격: <mark>der</mark> / die / das / die<br>2격: des / der / des / der<br>3격: <mark>dem / der / dem / den</mark><br>4격: <mark>den</mark> / die / das / die<br><br><b>★ 외우는 요령</b><br>· 여성·복수는 1격=4격 (die→die) — 안 변한다!<br>· 중성도 1격=4격 (das→das)<br>· <span class='warn'>남성 4격만 der→den으로 변한다</span> — 시험이 제일 좋아하는 지점<br>· 3격 노래처럼: dem-der-dem-den (복수 3격은 명사에도 -n!)<br><br><b>격 판별법</b><br>· 은/는/이/가 → 1격 · ~의 → 2격 · ~에게 → 3격 · ~을/를 → 4격<br>· mit·bei·zu·aus·von·nach·seit 뒤 → 무조건 3격<br>· für·ohne·gegen·um·durch 뒤 → 무조건 4격",
+   cards:[["남성 1격 (그 남자가)","der"],["남성 2격 (그 남자의)","des"],["남성 3격 (그 남자에게)","dem"],["남성 4격 (그 남자를)","den"],
+     ["여성 1격 (그 여자가)","die"],["여성 2격 (그 여자의)","der"],["여성 3격 (그 여자에게)","der"],["여성 4격 (그 여자를)","die"],
+     ["중성 1격 (그 아이가)","das"],["중성 2격 (그 아이의)","des"],["중성 3격 (그 아이에게)","dem"],["중성 4격 (그 아이를)","das"],
+     ["복수 1격 (그들이)","die"],["복수 2격 (그들의)","der"],["복수 3격 (그들에게)","den"],["복수 4격 (그들을)","die"]],
+   quiz:[
+     {q:"Ich sehe ___ Mann. (der Mann · ~를)", opts:["den","dem","der"], why:"남성 4격 → den (남성만 변한다!)"},
+     {q:"Das Auto ___ Frau ist neu. (~의)", opts:["der","die","dem"], why:"여성 2격 → der"},
+     {q:"Ich helfe ___ Kind. (das Kind · ~에게)", opts:["dem","das","den"], why:"helfen + 3격, 중성 → dem"},
+     {q:"___ Bücher liegen auf dem Tisch. (복수·주어)", opts:["Die","Der","Das"], why:"복수 1격 → die"},
+     {q:"Er gibt ___ Kindern Schokolade. (복수 · ~에게)", opts:["den","die","der"], why:"복수 3격 → den (+ Kindern의 -n)"},
+     {q:"Kennst du ___ Frau dort? (~를)", opts:["die","der","das"], why:"여성 4격 → die (여성은 1격=4격)"},
+     {q:"Das Haus ___ Mannes ist groß. (~의)", opts:["des","dem","der"], why:"남성 2격 → des (+ Mann-es)"},
+     {q:"Ich fahre mit ___ Zug. (der Zug)", opts:["dem","den","der"], why:"mit는 무조건 3격 → 남성 dem"},
+     {q:"___ Kind schläft schon. (중성·주어)", opts:["Das","Der","Die"], why:"중성 1격 → das"},
+     {q:"Er dankt ___ Lehrerin. (die · ~에게)", opts:["der","die","dem"], why:"danken + 3격, 여성 → der"}
+   ]},
+  {id:"d2", title:"부정관사 ein / kein",
+   rule:"ein(하나의)·kein(~이 없는)은 정관사와 <mark>비슷하게 변하지만</mark>, 남성 1격과 중성 1·4격에서 <mark>어미가 없다</mark>(ein).<br>kein은 ein + 복수형(keine)까지 있다.",
+   tip:"★ 남성 4격 → <mark>einen/keinen</mark>! ★ 3격은 정관사처럼 → <mark>einem/einer/einem</mark>! ★ 명사 부정은 nicht가 아니라 <mark>kein</mark>!",
+   detail:"<b>부정관사 표</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;남성 / 여성 / 중성 / (복수=kein만)<br>1격: <mark>ein</mark> / eine / <mark>ein</mark> / keine<br>2격: eines / einer / eines / keiner<br>3격: einem / einer / einem / keinen<br>4격: <mark>einen</mark> / eine / ein / keine<br><br><b>★ 포인트</b><br>· 정관사와 거의 같은 어미인데, <span class='warn'>남성 1격(ein)과 중성 1·4격(ein)만 어미가 없다</span><br>· 그래서 형용사가 대신 성별 표시를 한다 (6일차 주제!)<br>· kein = ein의 부정: Ich habe <mark>keine</mark> Zeit. · Ich habe <mark>keinen</mark> Hunger.<br><br><b>ein이 없는 자리 = kein도 없다?</b><br>아니! 복수엔 ein이 없지만 kein은 있다: keine Kinder(아이들이 없다)",
+   cards:[["하나의 (남성 1격)","ein"],["하나의 (남성 3격)","einem"],["하나를 (남성 4격)","einen"],
+     ["하나의 (여성 1격)","eine"],["하나의 (여성 3격)","einer"],["하나를 (여성 4격)","eine"],
+     ["하나의 (중성 1격)","ein"],["하나의 (중성 3격)","einem"],["하나를 (중성 4격)","ein"],
+     ["없는 (여성: 시간이 없다)","keine"],["없는 (남성 4격: 배 안 고파)","keinen"],["없는 (복수: 아이들이 없다)","keine"]],
+   quiz:[
+     {q:"Ich habe ___ Bruder. (der Bruder · ~가 있다)", opts:["einen","ein","einem"], why:"haben + 4격, 남성 → einen"},
+     {q:"Sie wohnt in ___ kleinen Stadt. (die Stadt)", opts:["einer","eine","einem"], why:"in + 3격(위치), 여성 → einer"},
+     {q:"Das ist ___ gutes Angebot. (das Angebot)", opts:["ein","eine","einen"], why:"중성 1격 → ein (어미 없음)"},
+     {q:"Er schreibt mit ___ Kugelschreiber. (der)", opts:["einem","einen","einer"], why:"mit + 3격, 남성 → einem"},
+     {q:"Ich habe ___ Zeit. (die Zeit · 없다)", opts:["keine","kein","keinen"], why:"여성 부정 → keine"},
+     {q:"Wir haben ___ Auto. (das Auto · 없다)", opts:["kein","keinen","keine"], why:"중성 4격 부정 → kein"},
+     {q:"Sie stellt ___ Frage. (die Frage · ~를)", opts:["eine","einer","ein"], why:"여성 4격 → eine"},
+     {q:"Ich habe ___ Hunger. (der Hunger · 안 고파)", opts:["keinen","kein","keine"], why:"남성 4격 부정 → keinen"},
+     {q:"Er ist der Sohn ___ Lehrers. (~의)", opts:["eines","einem","einen"], why:"남성 2격 → eines"},
+     {q:"Sie kommt aus ___ kleinen Dorf. (das Dorf)", opts:["einem","einen","einer"], why:"aus + 3격, 중성 → einem"}
+   ]},
+  {id:"d3", title:"소유관사 mein / dein / sein / ihr / unser",
+   rule:"소유관사는 <mark>ein과 똑같이</mark> 변한다.<br>ich→mein · du→dein · er/es→sein · sie→ihr · wir→unser · ihr→euer · sie/Sie→ihr/Ihr.",
+   tip:"★ 누구 것인지(mein/sein/ihr) 먼저, 그다음 ein처럼 어미! ★ 남성 4격 → <mark>meinen</mark>! ★ euer는 어미 붙으면 e 탈락 → <mark>eure</mark>!",
+   detail:"<b>소유관사 고르기 (2단계)</b><br>① 주인이 누구? → mein(나) · dein(너) · <mark>sein(그/그것)</mark> · <mark>ihr(그녀/그들)</mark> · unser(우리) · euer(너희) · Ihr(당신)<br>② 뒤 명사의 성·격에 맞춰 ein처럼 어미 붙이기<br><br><b>mein 변화표 (모든 소유관사 동일)</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;남성 / 여성 / 중성 / 복수<br>1격: mein / meine / mein / meine<br>3격: meinem / meiner / meinem / meinen<br>4격: <mark>meinen</mark> / meine / mein / meine<br><br><b>★ 함정 두 개</b><br>· <span class='warn'>sein vs ihr</span>: Paul과 <mark>seine</mark> Frau(그의 아내) · Anna와 <mark>ihr</mark> Mann(그녀의 남편) — 주인의 성별!<br>· <span class='warn'>euer</span>: 어미가 붙으면 가운데 e가 빠진다 → euer Haus, 但 <mark>eure</mark> Wohnung, in <mark>eurem</mark> Haus",
+   cards:[["나의 (남성 1격)","mein"],["나의 ~를 (남성 4격)","meinen"],["나의 ~에게 (남성 3격)","meinem"],
+     ["나의 (여성)","meine"],["너의 (여성)","deine"],["너의 ~를 (남성 4격)","deinen"],
+     ["그의 (남성 1격)","sein"],["그녀의 (남성 1격)","ihr"],["그의 ~에게 (여성 3격)","seiner"],
+     ["우리의 (중성 1격)","unser"],["너희의 (여성 · e탈락!)","eure"],["당신의 ~에게 (남성 3격)","Ihrem"]],
+   quiz:[
+     {q:"Das ist ___ Schwester. (나의)", opts:["meine","mein","meinen"], why:"여성 1격 → meine"},
+     {q:"Ich suche ___ Schlüssel. (나의 · der · ~를)", opts:["meinen","mein","meinem"], why:"남성 4격 → meinen"},
+     {q:"Er spielt mit ___ Kindern. (그의 · 복수)", opts:["seinen","seine","seinem"], why:"mit + 복수 3격 → seinen"},
+     {q:"Wie heißt ___ Bruder? (너의 · 주어)", opts:["dein","deinen","deine"], why:"남성 1격 → dein"},
+     {q:"Sie liebt ___ Mann. (그녀의 · ~를)", opts:["ihren","ihr","ihrem"], why:"그녀의=ihr + 남성 4격 → ihren"},
+     {q:"Wir verkaufen ___ Auto. (우리의 · das)", opts:["unser","unseren","unserem"], why:"중성 4격 → unser (어미 없음)"},
+     {q:"Ich wohne bei ___ Eltern. (나의 · 복수)", opts:["meinen","meine","meiner"], why:"bei + 복수 3격 → meinen"},
+     {q:"Das ist das Zimmer ___ Tochter. (그의 · ~의)", opts:["seiner","seine","seinem"], why:"여성 2격 → seiner"},
+     {q:"Habt ihr ___ Hausaufgaben gemacht? (너희의)", opts:["eure","euer","euren"], why:"복수 4격 + e탈락 → eure"},
+     {q:"Der Hund gehört ___ Nachbarin. (나의 · ~에게)", opts:["meiner","meine","meinem"], why:"gehören + 3격, 여성 → meiner"}
+   ]},
+  {id:"d4", title:"인칭대명사 mich/mir · dich/dir",
+   rule:"~를(4격): mich·dich·ihn·sie·es·uns·euch·Sie<br>~에게(3격): <mark>mir·dir·ihm·ihr·ihm·uns·euch·Ihnen</mark>",
+   tip:"★ helfen·danken·gefallen·gehören·schmecken → 무조건 3격(mir/dir)! ★ für·ohne·um 뒤 → 무조건 4격(mich/dich)!",
+   detail:"<b>인칭대명사 격변화 표</b><br>1격 → 4격(~를) → 3격(~에게)<br>ich → <mark>mich</mark> → <mark>mir</mark><br>du → dich → dir<br>er → <mark>ihn</mark> → <mark>ihm</mark><br>sie(그녀) → sie → <mark>ihr</mark><br>es → es → ihm<br>wir → uns → uns<br>ihr(너희) → euch → euch<br>sie/Sie → sie/Sie → <mark>ihnen/Ihnen</mark><br><br><b>★ 3격을 부르는 것들</b><br>· 동사: helfen(돕다) · danken(감사) · gefallen(맘에 들다) · gehören(~의 것) · schmecken(맛있다) · passen(어울리다)<br>· 전치사: mit · bei · zu · aus · von · nach · seit<br>· 고정표현: Wie geht es <mark>dir</mark>? · Es tut <mark>mir</mark> leid.<br><br><b>★ 4격을 부르는 것들</b><br>· 대부분의 동사(sehen·lieben·fragen·besuchen·anrufen)<br>· 전치사: für · ohne · gegen · um · durch",
+   cards:[["나를","mich"],["나에게","mir"],["너를","dich"],["너에게","dir"],["그를","ihn"],["그에게","ihm"],
+     ["그녀를","sie"],["그녀에게","ihr"],["우리를/우리에게","uns"],["너희를/너희에게","euch"],
+     ["그들에게","ihnen"],["당신에게","Ihnen"]],
+   quiz:[
+     {q:"Kannst du ___ helfen? (나)", opts:["mir","mich","ich"], why:"helfen + 3격 → mir"},
+     {q:"Ich liebe ___. (너)", opts:["dich","dir","du"], why:"lieben + 4격 → dich"},
+     {q:"Das Buch gehört ___. (그)", opts:["ihm","ihn","er"], why:"gehören + 3격 → ihm"},
+     {q:"Ich habe ___ gestern gesehen. (그녀)", opts:["sie","ihr","ihnen"], why:"sehen + 4격 → sie"},
+     {q:"Wie geht es ___? (당신)", opts:["Ihnen","Sie","Ihr"], why:"es geht + 3격 → Ihnen"},
+     {q:"Er dankt ___. (우리)", opts:["uns","wir","unser"], why:"danken + 3격 → uns"},
+     {q:"Ich rufe ___ morgen an. (너희)", opts:["euch","ihr","ihnen"], why:"anrufen + 4격 → euch"},
+     {q:"Schmeckt ___ die Pizza? (너)", opts:["dir","dich","du"], why:"schmecken + 3격 → dir"},
+     {q:"Das Geschenk ist für ___. (그녀)", opts:["sie","ihr","ihnen"], why:"für + 4격 → sie"},
+     {q:"Wir gratulieren ___ zum Geburtstag. (그들)", opts:["ihnen","sie","ihren"], why:"gratulieren + 3격 → ihnen"}
+   ]},
+  {id:"d5", title:"형용사 어미 ① 정관사 뒤 (-e / -en)",
+   rule:"der/die/das 뒤 형용사 어미는 <mark>-e 아니면 -en 딱 두 개</mark>.<br>단수 1격(+여성·중성 4격) → <mark>-e</mark> / 나머지 전부 → <mark>-en</mark>.",
+   tip:"★ 단수 주어면 -e! ★ 남성 4격·3격 전부·복수 전부 → 무조건 -en! ★ im/am/zum(=in dem)이 보이면 → -en!",
+   detail:"<b>정관사 뒤 형용사 표 (약변화)</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;남성 / 여성 / 중성 / 복수<br>1격: -<mark>e</mark> / -e / -e / -en<br>4격: -<mark>en</mark> / -e / -e / -en<br>3격: -en / -en / -en / -en<br>2격: -en / -en / -en / -en<br><br><b>예문으로 체화</b><br>· der gut<mark>e</mark> Kaffee (1격) → Ich trinke den gut<mark>en</mark> Kaffee. (4격)<br>· die klein<mark>e</mark> Stadt → in der klein<mark>en</mark> Stadt (3격)<br>· das rot<mark>e</mark> Auto → mit dem rot<mark>en</mark> Auto (3격)<br>· die nett<mark>en</mark> Leute (복수는 늘 -en)<br><br><span class='warn'>헷갈리면 -en!</span> 표의 16칸 중 11칸이 -en이다.",
+   cards:[["그 뜨거운 커피가 (1격)","der heiße Kaffee"],["그 뜨거운 커피를 (4격)","den heißen Kaffee"],
+     ["그 작은 도시가 (1격)","die kleine Stadt"],["그 작은 도시에서 (in+3격)","in der kleinen Stadt"],
+     ["그 빨간 차가 (1격)","das rote Auto"],["그 빨간 차를 타고 (mit+3격)","mit dem roten Auto"],
+     ["그 친절한 사람들 (복수 1격)","die netten Leute"],["그 오래된 집에서 (in+3격)","in dem alten Haus"],
+     ["그 친절한 남자에게 (3격)","dem netten Mann"],["그 아름다운 도시를 (4격)","die schöne Stadt"]],
+   quiz:[
+     {q:"Der ___ Kaffee schmeckt gut. (heiß)", opts:["heiße","heißen","heißes"], why:"der + 남성 1격 → -e"},
+     {q:"Ich nehme den ___ Pullover. (blau)", opts:["blauen","blaue","blaues"], why:"den(남성 4격) → -en"},
+     {q:"Die ___ Tasche war teuer. (klein)", opts:["kleine","kleinen","kleines"], why:"die + 여성 1격 → -e"},
+     {q:"Das ___ Auto gehört mir. (rot)", opts:["rote","roten","rotes"], why:"das + 중성 1격 → -e"},
+     {q:"Er wohnt in dem ___ Haus. (alt)", opts:["alten","alte","altes"], why:"dem(3격) → -en"},
+     {q:"Die ___ Kinder spielen draußen. (klein)", opts:["kleinen","kleine","kleines"], why:"복수 → 무조건 -en"},
+     {q:"Ich danke dem ___ Mann. (nett)", opts:["netten","nette","netter"], why:"dem(3격) → -en"},
+     {q:"Am ___ Morgen trinke ich Kaffee. (früh)", opts:["frühen","frühe","früher"], why:"am = an dem(3격) → -en"},
+     {q:"Das Ende des ___ Films war gut. (lang)", opts:["langen","lange","langes"], why:"des(2격) → -en"},
+     {q:"Wir besuchen die ___ Stadt. (schön)", opts:["schöne","schönen","schönes"], why:"여성 4격 → -e (여성은 1=4격)"}
+   ]},
+  {id:"d6", title:"형용사 어미 ② ein/kein/mein 뒤",
+   rule:"ein이 성별을 못 보여주는 자리에서는 <mark>형용사가 정관사의 어미를 대신</mark> 가져간다.<br>남성 1격 → <mark>-er</mark> / 중성 1·4격 → <mark>-es</mark> / 여성 → -e / 나머지 → -en.",
+   tip:"★ ein + 빈칸이면 명사 성별부터! der였으면 → -er, das였으면 → -es, die였으면 → -e!",
+   detail:"<b>ein 뒤 형용사 표 (혼합변화)</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;남성 / 여성 / 중성 / 복수(kein·mein)<br>1격: -<mark>er</mark> / -e / -<mark>es</mark> / -en<br>4격: -en / -e / -<mark>es</mark> / -en<br>3격: -en / -en / -en / -en<br><br><b>왜 -er/-es가 붙나?</b><br>ein Mann만 보면 남성인지 중성인지 모른다. 그래서 der의 r, das의 s를 형용사가 대신 단다:<br>· <mark>der</mark> → ein gut<mark>er</mark> Mann<br>· <mark>das</mark> → ein gut<mark>es</mark> Kind<br>· die → eine gut<mark>e</mark> Frau (eine가 이미 여성 표시)<br><br><b>예문</b><br>· Das ist ein interessant<mark>er</mark> Film. (der Film)<br>· Ich habe ein neu<mark>es</mark> Handy. (das Handy)<br>· Er hat einen groß<mark>en</mark> Hund. (4격 남성 → -en)<br>· mein neu<mark>er</mark> Job · unsere klein<mark>e</mark> Tochter",
+   cards:[["좋은 남자 (ein+남성 1격)","ein guter Mann"],["좋은 아이 (ein+중성 1격)","ein gutes Kind"],
+     ["좋은 여자 (eine+여성)","eine gute Frau"],["큰 개를 (einen+4격)","einen großen Hund"],
+     ["새 휴대폰 (ein+중성)","ein neues Handy"],["재미있는 영화 (ein+남성 1격)","ein interessanter Film"],
+     ["작은 집에서 (in einem+3격)","in einem kleinen Haus"],["나의 새 직장 (mein+남성 1격)","mein neuer Job"],
+     ["예쁜 집 (eine+여성)","eine schöne Wohnung"],["힘든 하루였다 (ein+남성)","ein anstrengender Tag"]],
+   quiz:[
+     {q:"Das ist ein ___ Film. (spannend · der)", opts:["spannender","spannende","spannendes"], why:"남성 1격 → -er"},
+     {q:"Ich habe eine ___ Idee. (gut)", opts:["gute","guten","gutes"], why:"eine(여성) → -e"},
+     {q:"Wir suchen ein ___ Hotel. (billig · das)", opts:["billiges","billige","billigen"], why:"중성 → -es"},
+     {q:"Er hat einen ___ Hund. (groß)", opts:["großen","großer","großes"], why:"einen(4격) → -en"},
+     {q:"Sie wohnt in einer ___ Wohnung. (hell)", opts:["hellen","helle","helles"], why:"einer(3격) → -en"},
+     {q:"Das war ein ___ Tag. (anstrengend · der)", opts:["anstrengender","anstrengende","anstrengendes"], why:"남성 1격 → -er"},
+     {q:"Ich brauche einen ___ Stift. (neu)", opts:["neuen","neuer","neues"], why:"einen(4격) → -en"},
+     {q:"Mit einem ___ Auto fährt man sicher. (modern)", opts:["modernen","moderne","modernes"], why:"einem(3격) → -en"},
+     {q:"Meine ___ Schwester wohnt in Seoul. (klein)", opts:["kleine","kleinen","kleines"], why:"meine(여성 1격) → -e"},
+     {q:"Kein ___ Wort! (einzig · das)", opts:["einziges","einzige","einzigen"], why:"중성 1격 → -es"}
+   ]},
+  {id:"d7", title:"형용사 어미 ③ 관사 없이 (강변화)",
+   rule:"관사가 아예 없으면 <mark>형용사가 정관사 역할을 통째로</mark> 한다.<br>어미가 정관사와 거의 같아진다: guter Wein(der) · frische Milch(die) · kaltes Wasser(das).",
+   tip:"★ 관사가 없다? → 형용사에 der/die/das의 어미를 그대로! ★ 편지 마지막 인사: Mit freundlichen Grüßen(-en)!",
+   detail:"<b>무관사 형용사 표 (강변화)</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;남성 / 여성 / 중성 / 복수<br>1격: -<mark>er</mark> / -<mark>e</mark> / -<mark>es</mark> / -e<br>4격: -en / -e / -es / -e<br>3격: -em / -er / -em / -en<br><br><b>언제 관사가 없나?</b><br>· 물질·음식: kalt<mark>es</mark> Wasser · frisch<mark>e</mark> Milch · gut<mark>er</mark> Wein<br>· 복수 일반: klein<mark>e</mark> Kinder · nett<mark>e</mark> Leute<br>· 추상: groß<mark>es</mark> Glück · viel<mark>e</mark> Grüße<br><br><b>★ 시험 최다 출제 표현</b><br>· <mark>Mit freundlichen Grüßen</mark> (편지 맺음말 — mit+복수 3격 -en)<br>· Viel<mark>e</mark> Grüße · Herzlich<mark>en</mark> Glückwunsch! (4격 남성)<br>· bei schlecht<mark>em</mark> Wetter (3격 중성 -em)<br><br><span class='warn'>주의:</span> viel·wenig은 단수 불가산 앞에서 어미 없음: viel Zeit, viel Erfolg",
+   cards:[["좋은 와인이 (무관사·남성 1격)","guter Wein"],["신선한 우유 (여성)","frische Milch"],
+     ["차가운 물 (중성)","kaltes Wasser"],["따뜻한 커피를 (남성 4격)","warmen Kaffee"],
+     ["친절한 사람들 (복수 1격)","nette Leute"],["좋은 날씨에 (bei+중성 3격)","bei gutem Wetter"],
+     ["진심 어린 축하! (남성 4격)","Herzlichen Glückwunsch"],["친절한 안부와 함께 (편지 맺음말)","Mit freundlichen Grüßen"],
+     ["많은 안부 (복수)","Viele Grüße"],["작은 아이들 (복수 1격)","kleine Kinder"]],
+   quiz:[
+     {q:"Ich trinke gern ___ Kaffee. (schwarz · der · 4격)", opts:["schwarzen","schwarzer","schwarzes"], why:"무관사 남성 4격 → -en"},
+     {q:"___ Wetter macht mich müde. (schlecht · das · 1격)", opts:["Schlechtes","Schlechter","Schlechten"], why:"무관사 중성 1격 → -es (das의 s)"},
+     {q:"Sie trinkt nur ___ Milch. (frisch · die)", opts:["frische","frischen","frisches"], why:"무관사 여성 → -e"},
+     {q:"___ Wein ist teuer. (gut · der · 1격)", opts:["Guter","Gute","Gutes"], why:"무관사 남성 1격 → -er (der의 r)"},
+     {q:"Ich esse gern ___ Brot. (frisch · das · 4격)", opts:["frisches","frischer","frischen"], why:"무관사 중성 4격 → -es"},
+     {q:"Bei ___ Wetter bleiben wir drinnen. (schlecht · das)", opts:["schlechtem","schlechten","schlechtes"], why:"bei + 중성 3격 → -em"},
+     {q:"Er hat ___ Hunger. (groß · der · 4격)", opts:["großen","großer","großes"], why:"남성 4격 → -en"},
+     {q:"Mit ___ Grüßen (freundlich · 편지 맺음말)", opts:["freundlichen","freundliche","freundlicher"], why:"mit + 복수 3격 → -en (통암기!)"},
+     {q:"___ Leute mögen diese Musik. (viel · 복수 1격)", opts:["Viele","Vielen","Vieler"], why:"복수 1격 → -e"},
+     {q:"Er gibt mir ___ Tipps. (gut · 복수 4격)", opts:["gute","guten","guter"], why:"무관사 복수 4격 → -e"}
+   ]},
 ];
