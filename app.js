@@ -99,6 +99,26 @@ const screen = document.getElementById("screen");
 let currentTab = "home";
 let backFn = null;   // 현재 화면의 뒤로가기 동작 (null이면 버튼 없음)
 
+// 정답/오답 효과음 (WebAudio — 파일 없이 생성)
+let audioCtx = null;
+function sfx(ok) {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const t0 = audioCtx.currentTime;
+    const tone = (freq, start, dur, type, gain) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(gain, t0 + start);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + start + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t0 + start); o.stop(t0 + start + dur);
+    };
+    if (ok) { tone(880, 0, 0.12, "sine", 0.2); tone(1318, 0.1, 0.2, "sine", 0.2); }   // 딩동↑
+    else { tone(200, 0, 0.22, "square", 0.08); tone(150, 0.14, 0.3, "square", 0.08); } // 부저↓
+  } catch {}
+}
+
 // 세션 상단바 (좌: 뒤로+제목, 우: 진행표시)
 function sesTop(title, right) {
   return `<div class="session-top">
@@ -360,36 +380,74 @@ function vocabExtraBtn() {
   return {label: "새 단어 10개 더 외우기", fn: () => { S.extraNew = (S.extraNew || 0) + 10; save(); startVocabSession(); }};
 }
 
-// ---------- 단어 허브 (카드 / 전체 단어장 / 테스트) ----------
+// ---------- 단어 허브: ① 오늘의 단어 훑기 → ② 카드 → ③ 시험 ----------
+function todaysWordIds() {
+  const t = today();
+  const intro = S.introduced.filter(id => S.srs[id] && S.srs[id].intro === t);
+  return [...new Set([...intro, ...dueReviews()])];
+}
+
+function vRow(id) {
+  const w = VOCAB.find(v => v.id === id);
+  if (!w) return "";
+  const sub = w.pl ? `복수: ${w.pl}` : w.gr || "";
+  return `<div class="vlist-row" data-de="${w.de}">
+    <div class="vlist-main">
+      <div class="vde">${w.de}</div>
+      ${sub ? `<div class="vgr">${sub}</div>` : ""}
+      <div class="vko">${w.ko}</div>
+    </div>
+    <button class="tts-btn vtts" data-de="${w.de}">듣기</button>
+  </div>`;
+}
+
 function renderVocabHub() {
-  const due = dueReviews().length;
-  const news = newAvailable().length;
-  const introToday = introducedTodayCount();
+  const due = dueReviews();
+  const news = newAvailable();
+  const t = today();
+  const introToday = S.introduced.filter(id => S.srs[id] && S.srs[id].intro === t);
+  const todayNew = [...introToday, ...news];   // 오늘 배울/배운 새 단어
+  const cardCount = due.length + news.length;
+
   screen.innerHTML = `
     <div class="panel">
-      <h2>카드 학습 (매일 미션)</h2>
-      <p class="sub">오늘 새 단어 ${introToday}/${S.newPerDay}개 · 복습 대기 ${due}개</p>
-      <button class="btn big" data-go="vocab-cards">${due + news > 0 ? "카드 학습 시작" : "오늘 완료 — 복습 카드 없음"}</button>
+      <h2>1 · 오늘의 단어 훑어보기</h2>
+      ${todayNew.length ? `<p class="sub">새로 외울 단어 ${todayNew.length}개</p>
+        <div class="vlist">${todayNew.map(vRow).join("")}</div>` : ""}
+      ${due.length ? `<p class="sub" style="margin-top:16px">복습할 단어 ${due.length}개</p>
+        <div class="vlist">${due.map(vRow).join("")}</div>` : ""}
+      ${!todayNew.length && !due.length ? `<p class="sub">오늘 분량을 모두 끝냈어요. 아래에서 "+10개 더"를 눌러 추가할 수 있어요.</p>
+        <button class="btn big secondary" id="more10">새 단어 +10개 더</button>` : ""}
     </div>
     <div class="panel">
-      <h2>단어 테스트</h2>
-      <p class="sub">10문제 4지선다 · 틀린 단어는 오늘 복습 카드로 자동 추가돼요</p>
+      <h2>2 · 카드로 외우기</h2>
+      <button class="btn big" data-go="vocab-cards" ${cardCount ? "" : "disabled style='opacity:.4'"}>
+        카드 학습 시작${cardCount ? ` (${cardCount}장)` : " — 오늘 완료"}</button>
+    </div>
+    <div class="panel">
+      <h2>3 · 단어 시험</h2>
+      <p class="sub">오늘 공부한 단어에서 출제 · 틀린 단어는 복습 카드로 자동 추가</p>
       <div class="grade-row" style="margin-top:12px">
         <button class="g-again" id="t-de">독일어 → 한국어</button>
         <button class="g-again" id="t-ko">한국어 → 독일어</button>
       </div>
-      <button class="btn big secondary" id="t-mix">섞어서 테스트</button>
+      <button class="btn big secondary" id="t-mix">섞어서 시험</button>
     </div>
     <div class="panel">
-      <h2>전체 단어장</h2>
-      <p class="sub">배치 1 단어 ${VOCAB.length}개를 한눈에 — 동사는 불규칙 변화·과거분사(PP) 포함</p>
-      <button class="btn big secondary" id="v-list">전체 단어 보기</button>
+      <div class="task-row" style="border:none;padding:2px 0">
+        <div class="task-left"><div class="task-name" style="font-size:0.95rem">전체 단어장</div>
+          <div class="task-detail">전체 ${VOCAB.length}개 · PP 포함</div></div>
+        <button class="btn secondary" id="v-list">보기</button>
+      </div>
     </div>`;
   screen.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => setTab(b.dataset.go)));
+  screen.querySelectorAll(".vtts").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); speak(b.dataset.de); }));
+  screen.querySelectorAll(".vlist-row").forEach(r => r.addEventListener("click", () => speak(r.dataset.de)));
   document.getElementById("t-de").addEventListener("click", () => startVocabTest("de2ko"));
   document.getElementById("t-ko").addEventListener("click", () => startVocabTest("ko2de"));
   document.getElementById("t-mix").addEventListener("click", () => startVocabTest("mix"));
   document.getElementById("v-list").addEventListener("click", renderVocabList);
+  document.getElementById("more10")?.addEventListener("click", () => { S.extraNew = (S.extraNew || 0) + 10; save(); renderVocabHub(); });
 }
 
 // ---------- 전체 단어장 ----------
@@ -423,8 +481,12 @@ function renderVocabList() {
 // ---------- 단어 테스트 (독↔한 4지선다) ----------
 let vt = null;
 function startVocabTest(dir) {
-  const pool = shuffle([...VOCAB]).slice(0, 10);
-  vt = {dir, qs: pool, pos: 0, correct: 0, wrong: []};
+  // 오늘 공부한 단어 우선 출제, 부족하면 배운 단어 전체 → 전체 단어
+  let pool = todaysWordIds().map(id => VOCAB.find(v => v.id === id)).filter(Boolean);
+  if (pool.length < 4) pool = VOCAB.filter(v => S.introduced.includes(v.id));
+  if (pool.length < 4) pool = [...VOCAB];
+  const qs = shuffle([...pool]).slice(0, 10);
+  vt = {dir, qs, pos: 0, correct: 0, wrong: []};
   nextVocabTestQ();
 }
 
@@ -460,7 +522,7 @@ function nextVocabTestQ() {
     if (answered) return;
     answered = true;
     const chosen = opts[+btn.dataset.i];
-    const rightIdx = opts.findIndex(o => o.ok);
+    sfx(chosen.ok);
     screen.querySelectorAll(".opt").forEach((b2, i2) => {
       if (opts[i2].ok) b2.classList.add("right");
       else if (+btn.dataset.i === i2) b2.classList.add("wrong");
@@ -895,6 +957,7 @@ function nextQuizQ() {
     answered = true;
     const picked = opts[parseInt(btn.dataset.i)];
     const correctText = item.opts[0];
+    sfx(picked.correct);
     screen.querySelectorAll(".opt").forEach((b, i) => {
       b.disabled = true;
       if (opts[i].correct) b.classList.add("right");
