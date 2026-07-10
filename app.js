@@ -912,7 +912,14 @@ function renderGrammarDetail(gid, backToLesson) {
 }
 
 function startQuiz(g, mode) {
-  qz = {list: g.quiz.map((q, i) => ({g, qi: i})), pos: 0, correct: 0, mode, lesson: g};
+  // 이번 레슨 5문제 + 이전에 배운 레슨에서 복습 3문제를 섞어서 출제
+  // (한 문법만 연달아 나오면 패턴으로 답을 찍게 되니까)
+  const list = g.quiz.map((q, i) => ({g, qi: i}));
+  const reviewPool = [];
+  GRAMMAR.filter(x => x.id !== g.id && S.grammarDone.includes(x.id))
+    .forEach(x => x.quiz.forEach((q, i) => reviewPool.push({g: x, qi: i})));
+  const review = shuffle(reviewPool).slice(0, 3);
+  qz = {list: shuffle([...list, ...review]), pos: 0, correct: 0, mode, lesson: g};
   nextQuizQ();
 }
 
@@ -938,7 +945,8 @@ function nextQuizQ() {
     [opts[i], opts[j]] = [opts[j], opts[i]];
   }
   const abc = ["a", "b", "c"];
-  const label = qz.mode === "wrong" ? "오답 다시 풀기" : qz.mode === "mixed" ? "실전 모의" : g.title;
+  const label = qz.mode === "wrong" ? "오답 다시 풀기" : qz.mode === "mixed" ? "실전 모의"
+    : (qz.lesson ? qz.lesson.title + " + 복습" : g.title);
   backFn = renderGrammar;
   screen.innerHTML = `
     ${sesTop(label, `문제 ${qz.pos + 1} / ${qz.list.length}`)}
