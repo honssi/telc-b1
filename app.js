@@ -15,7 +15,10 @@ function load() {
     drillsToday: 0,
     grammarDone: [],     // 완료한 문법 레슨 id
     grammarToday: 0,     // 오늘 완료한 레슨 수
-    deckToday: 0,        // 오늘 찍기 카드 맞힌 수
+    deckToday: 0,        // (구) 오늘 찍기 카드 맞힌 수
+    deckTopicsDone: 0,   // 관사 코스: 완료한 주제 수 (7개 로테이션)
+    deckCardsDay: null,  // 오늘 카드 연습 완료한 날짜
+    deckQuizDay: null,   // 오늘 주제 시험 완료한 날짜
     extraNew: 0,         // 오늘 추가로 허용한 새 단어 수
     extraDrills: 0,      // 오늘 추가 드릴 수
     extraGrammar: 0,     // 오늘 추가 문법 레슨 수
@@ -165,12 +168,14 @@ function renderHome() {
   const learned = S.introduced.length;
   const pct = Math.min(100, Math.round(learned / TOTAL_TARGET * 1000) / 10);
 
-  const deckDone = S.deckToday || 0;
+  const deckTopic = DECL_COURSE[deckTopicIdx()];
+  const deckCardsDone = S.deckCardsDay === today();
+  const deckQuizDone = S.deckQuizDay === today();
 
   // 오늘 목표 달성률 (초과분은 100%로 계산)
   const vPct = Math.min(1, vGoal ? introToday / vGoal : 1);
   const gPct = Math.min(1, gDone / GRAMMAR_PER_DAY);
-  const kPct = Math.min(1, deckDone / DECK_GOAL);
+  const kPct = deckQuizDone ? 1 : deckCardsDone ? 0.5 : 0;
   const totalPct = Math.round((vPct + gPct + kPct) / 3 * 100);
 
   const vocabBtn = (due + news > 0)
@@ -183,8 +188,8 @@ function renderHome() {
     : gSt.g
       ? `<button class="btn secondary" data-extra="grammar">+1개 더</button>`
       : `<span class="task-done">완료</span>`;
-  const deckBtn = deckDone >= DECK_GOAL
-    ? `<button class="btn secondary" data-go="deck">더 하기</button>`
+  const deckBtn = deckQuizDone
+    ? `<button class="btn secondary" data-go="deck">복습</button>`
     : `<button class="btn" data-go="deck">시작</button>`;
 
   screen.innerHTML = `
@@ -204,8 +209,8 @@ function renderHome() {
         ${grammarBtn}
       </div>
       <div class="task-row">
-        <div class="task-left"><div class="task-name">관사·대명사 찍기</div>
-          <div class="task-detail">오늘 ${deckDone}/${DECK_GOAL}개 · 매일 반복하면 저절로 외워져요</div>
+        <div class="task-left"><div class="task-name">관사·어미변화</div>
+          <div class="task-detail">오늘의 주제: ${deckTopic.title} · 카드 ${deckCardsDone ? "✓" : "—"} 시험 ${deckQuizDone ? "✓" : "—"}</div>
           <div class="mini-wrap"><div class="mini-bar" style="width:${kPct*100}%"></div></div></div>
         ${deckBtn}
       </div>
@@ -691,35 +696,153 @@ function nextDrill() {
   });
 }
 
-// ---------- 찍기 (관사·대명사 즉시 암기) ----------
+// ---------- 관사·어미변화 코스 (하루 한 주제: 설명 → 카드 → 시험) ----------
+function deckTopicIdx() {
+  // 오늘 시험까지 끝냈으면 오늘 주제를 계속 보여주고, 내일부터 다음 주제
+  const done = S.deckTopicsDone || 0;
+  return (S.deckQuizDay === today() ? Math.max(0, done - 1) : done) % DECL_COURSE.length;
+}
+
 function renderDeckHub() {
   backFn = null;
-  const deckDone = S.deckToday || 0;
+  const idx = deckTopicIdx();
+  const topic = DECL_COURSE[idx];
+  const cardsDone = S.deckCardsDay === today();
+  const quizDone = S.deckQuizDay === today();
   screen.innerHTML = `
     <div class="panel">
-      <h2>관사·대명사 찍기 · 오늘 ${deckDone}/${DECK_GOAL}</h2>
-      <p class="sub">한국어를 보고 독일어를 <b>바로 튀어나오게</b> 만드는 반복 훈련이에요.<br>카드를 탭하면 답이 보이고, 알면 오른쪽·모르면 왼쪽으로 넘기세요.</p>
-      <button class="btn big" id="deckAll">전체 섞어서 시작 (${DECK.reduce((n,c)=>n+c.cards.length,0)}장)</button>
+      <h2>오늘의 관사 주제 · ${idx + 1} / ${DECL_COURSE.length}</h2>
+      <div class="gram-title">${topic.title}</div>
+      <div class="gram-rule">${topic.rule}</div>
+      <div class="gram-signal"><span class="sig-label">시그널</span>${topic.tip}</div>
+      <div class="gram-detail">${topic.detail}</div>
+      <button class="btn big" id="deckCards">① 카드로 외우기 (${topic.cards.length}장)${cardsDone ? " — 완료 ✓" : ""}</button>
+      <button class="btn big ${cardsDone && !quizDone ? "" : "secondary"}" id="deckQuiz">② 주제 시험 10문제${quizDone ? " — 완료 ✓" : ""}</button>
     </div>
     <div class="panel">
-      <h2>주제별 연습</h2>
+      <h2>전체 주제 (7일 로테이션)</h2>
       <div class="gram-list">
-        ${DECK.map((c, i) => `<button class="gram-row" data-di="${i}">
-          <span class="gram-num">${c.cards.length}</span>
-          <span class="gram-row-title">${c.cat}</span>
-          <span class="gram-state">▶</span>
+        ${DECL_COURSE.map((c, i) => `<button class="gram-row" data-di="${i}">
+          <span class="gram-num${(S.deckTopicsDone || 0) > i ? " done" : ""}">${i + 1}</span>
+          <span class="gram-row-title">${c.title}</span>
+          <span class="gram-state">${i === idx ? "오늘" : ""}</span>
         </button>`).join("")}
       </div>
+      <p class="sub" style="margin-top:12px">주제를 누르면 설명을 보고 자유롭게 연습·시험할 수 있어요 (기록은 오늘 주제만)</p>
     </div>`;
-  document.getElementById("deckAll").addEventListener("click", () => {
-    const all = [];
-    DECK.forEach(c => c.cards.forEach(([q, a]) => all.push({q, a, cat: c.cat})));
-    runDeck(shuffle(all), "전체 섞기");
-  });
+  document.getElementById("deckCards").addEventListener("click", () => startDeckCards(idx, true));
+  document.getElementById("deckQuiz").addEventListener("click", () => startDeckQuiz(idx, true));
   screen.querySelectorAll("[data-di]").forEach(b => b.addEventListener("click", () => {
-    const c = DECK[parseInt(b.dataset.di)];
-    runDeck(shuffle(c.cards.map(([q, a]) => ({q, a, cat: c.cat}))), c.cat);
+    const i = parseInt(b.dataset.di);
+    if (i === idx) return renderDeckHub();
+    renderDeckTopic(i);
   }));
+}
+
+// 다른 주제 자유 연습 화면
+function renderDeckTopic(i) {
+  const topic = DECL_COURSE[i];
+  backFn = renderDeckHub;
+  screen.innerHTML = `
+    ${sesTop("관사 주제 " + (i + 1), "자유 연습")}
+    <div class="gram-card">
+      <div class="gram-title">${topic.title}</div>
+      <div class="gram-rule">${topic.rule}</div>
+      <div class="gram-signal"><span class="sig-label">시그널</span>${topic.tip}</div>
+      <div class="gram-detail">${topic.detail}</div>
+    </div>
+    <button class="btn big" id="pCards">카드 연습 (${topic.cards.length}장)</button>
+    <button class="btn big secondary" id="pQuiz">시험 10문제</button>`;
+  wireBack();
+  document.getElementById("pCards").addEventListener("click", () => startDeckCards(i, false));
+  document.getElementById("pQuiz").addEventListener("click", () => startDeckQuiz(i, false));
+}
+
+function startDeckCards(i, isToday) {
+  const topic = DECL_COURSE[i];
+  deckIsToday = isToday;
+  deckTopicI = i;
+  runDeck(shuffle(topic.cards.map(([q, a]) => ({q, a, cat: topic.title}))), topic.title);
+}
+let deckIsToday = false, deckTopicI = 0;
+
+// ---------- 관사 주제 시험 ----------
+let dqz = null;
+function startDeckQuiz(i, isToday) {
+  const topic = DECL_COURSE[i];
+  dqz = {topic, i, isToday, list: shuffle(topic.quiz.map((q, qi) => qi)), pos: 0, correct: 0, wrong: []};
+  nextDeckQuizQ();
+}
+
+function nextDeckQuizQ() {
+  if (dqz.pos >= dqz.list.length) { finishDeckQuiz(); return; }
+  const item = dqz.topic.quiz[dqz.list[dqz.pos]];
+  const opts = shuffle(item.opts.map((t, oi) => ({t, ok: oi === 0})));
+  const abc = ["a", "b", "c"];
+  backFn = renderDeckHub;
+  screen.innerHTML = `
+    ${sesTop(dqz.topic.title, `문제 ${dqz.pos + 1} / ${dqz.list.length}`)}
+    <div class="quiz-card">
+      <div class="quiz-q">${item.q.replace("___", `<span class="gap">___</span>`)}</div>
+      <div class="quiz-opts">
+        ${opts.map((o, oi) => `<button class="opt" data-i="${oi}"><span class="abc">${abc[oi]}</span>${o.t}</button>`).join("")}
+      </div>
+      <div id="dfb"></div>
+      <button class="btn big" id="dnext" style="display:none">다음 →</button>
+    </div>`;
+  wireBack();
+  let answered = false;
+  screen.querySelectorAll(".opt").forEach(btn => btn.addEventListener("click", () => {
+    if (answered) return;
+    answered = true;
+    const picked = opts[parseInt(btn.dataset.i)];
+    sfx(picked.ok);
+    screen.querySelectorAll(".opt").forEach((b, oi) => {
+      b.disabled = true;
+      if (opts[oi].ok) b.classList.add("right");
+      else if (b === btn) b.classList.add("wrong");
+    });
+    if (picked.ok) dqz.correct++;
+    else dqz.wrong.push(item);
+    const full = item.q.replace("___", item.opts[0]);
+    document.getElementById("dfb").innerHTML = `
+      <div class="feedback ${picked.ok ? "ok" : "no"}">
+        <span class="label">${picked.ok ? "정답" : "오답 · 정답 문장"}</span>
+        <span class="correct sentence">${item.q.replace("___", `<u>${item.opts[0]}</u>`)}</span>
+        <span class="note">${item.why}</span>
+      </div>`;
+    speak(full.replace(/\(.*?\)/g, ""));
+    document.getElementById("dnext").style.display = "block";
+  }));
+  document.getElementById("dnext").addEventListener("click", () => { dqz.pos++; nextDeckQuizQ(); });
+}
+
+function finishDeckQuiz() {
+  const total = dqz.list.length;
+  if (dqz.isToday && S.deckQuizDay !== today()) {
+    S.deckQuizDay = today();
+    S.deckTopicsDone = (S.deckTopicsDone || 0) + 1;
+    markStudied();
+    save();
+  }
+  backFn = null;
+  screen.innerHTML = `
+    <div class="done-box panel">
+      <div class="rule"></div>
+      <h2>${dqz.topic.title} — ${dqz.correct} / ${total}</h2>
+      <p class="sub">${dqz.wrong.length === 0 ? "전부 정답! 이 주제는 완벽해요." : "틀린 유형은 아래에서 다시 확인하세요."}</p>
+    </div>
+    ${dqz.wrong.length ? `<div class="panel"><h2>틀린 문제 (${dqz.wrong.length}개)</h2>
+      ${dqz.wrong.map(w => `<div class="vlist-row"><div class="vlist-main">
+        <div class="vde">${w.q.replace("___", "<u>" + w.opts[0] + "</u>")}</div>
+        <div class="vgr">${w.why}</div>
+      </div></div>`).join("")}</div>` : ""}
+    <div class="panel">
+      <button class="btn big" id="dagain">한 번 더 시험</button>
+      <button class="btn big secondary" data-go="deck">관사 홈으로</button>
+    </div>`;
+  document.getElementById("dagain").addEventListener("click", () => startDeckQuiz(dqz.i, dqz.isToday));
+  screen.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => setTab(b.dataset.go)));
 }
 
 function shuffle(arr) {
@@ -743,8 +866,9 @@ let deckLabel = "", deckTotal = 0;
 function nextDeckCard() {
   backFn = renderDeckHub;
   if (deckQ.length === 0) {
-    renderDone("찍기 완료", `${deckLabel} 한 바퀴를 다 돌았어요. 내일 또 반복!`, null,
-      {label: "한 번 더 섞어서", fn: renderDeckHub});
+    if (deckIsToday && S.deckCardsDay !== today()) { S.deckCardsDay = today(); save(); }
+    renderDone("카드 완료", `${deckLabel} 한 바퀴를 다 돌았어요. 이제 시험으로 확인해 보세요!`, null,
+      {label: "이 주제 시험 보기 (10문제)", fn: () => startDeckQuiz(deckTopicI, deckIsToday)});
     return;
   }
   const c = deckQ[0];
