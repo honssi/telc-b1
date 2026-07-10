@@ -9,7 +9,12 @@ const GRAMMAR = [
      {q:"Hast du gestern viel ___?", opts:["gearbeitet","arbeitest","arbeiten"], why:"Hast + 과거분사: gearbeitet"},
      {q:"Wir haben endlich eine Wohnung ___.", opts:["gefunden","finden","findet"], why:"haben + gefunden. finden은 불규칙: ge-...-en"},
      {q:"Er hat mir eine E-Mail ___.", opts:["geschrieben","schreiben","schrieb"], why:"hat와 함께면 과거분사. schrieb(Präteritum)는 hat와 못 쓴다."},
-     {q:"Ich habe den Termin leider ___.", opts:["vergessen","vergesse","vergisst"], why:"ver-로 시작하는 동사는 ge- 없이: vergessen(과거분사도 같은 모양)"}
+     {q:"Ich habe den Termin leider ___.", opts:["vergessen","vergesse","vergisst"], why:"ver-로 시작하는 동사는 ge- 없이: vergessen(과거분사도 같은 모양)"},
+     {q:"Hast du das Buch schon ___?", opts:["gelesen", "liest", "lesen"], why:"Hast + 과거분사: gelesen"},
+     {q:"Wir haben am Samstag im Supermarkt ___.", opts:["eingekauft", "einkaufen", "kauft ein"], why:"분리동사 과거분사: ge가 사이에 → eingekauft"},
+     {q:"Ich habe gestern Abend Musik ___.", opts:["gehört", "höre", "hören"], why:"규칙동사: ge+hör+t = gehört"},
+     {q:"Habt ihr schon ___?", opts:["gegessen", "esst", "essen"], why:"essen → gegessen (불규칙)"},
+     {q:"Sie hat das Auto ___.", opts:["repariert", "gerepariert", "reparieren"], why:"-ieren 동사는 ge- 없이: repariert"}
    ]},
   {id:"g02", title:"Perfekt: 이동·변화 동사는 bin/ist", rule:"과거분사는 같지만 조동사가 다른 그룹이 있다: 몸이 이동하거나 상태가 변하는 동사는 haben 대신 sein을 쓴다.<br>이동: gehen(가다) · fahren(타고 가다) · kommen(오다) · fliegen(비행기 타고 가다).<br>변화: aufstehen(일어나다) · umziehen(이사하다) · einschlafen(잠들다).<br>passieren(일이 일어나다)과 bleiben(머물다)도 sein을 쓴다 — 예외라서 시험이 좋아한다.", tip:"★ 빈칸 뒤에 gegangen·gefahren·passiert 같은 이동·변화 과거분사가 보이면 → <mark>bin/ist/sind</mark>!",
    detail:"<b>어떤 동사가 sein을 쓰나?</b><br>A지점에서 B지점으로 움직이거나(이동), A상태에서 B상태로 바뀌는(변화) 동사다.<br><br><b>sein 동사 목록 (이건 외우자)</b><br>· 이동: gehen(가다) · kommen(오다) · fahren(타고 가다) · fliegen(비행기로 가다) · laufen(달리다) · reisen(여행가다)<br>· 변화: aufstehen(일어나다) · einschlafen(잠들다) · aufwachen(깨다) · umziehen(이사하다) · werden(~이 되다) · sterben(죽다)<br>· 예외 3개: passieren(일어나다) · bleiben(머물다) · sein(있다) — 움직임이 없어 보여도 sein을 쓴다. 시험 단골!<br><br><b>비교</b><br>· Ich habe gegessen. (먹었다 — 이동 없음 → haben)<br>· Ich bin gegangen. (갔다 — 이동 → sein)<br>· Was ist passiert? (무슨 일이야? — 예외 → sein)<br><br><b>시험 함정</b><br>waren(실제 과거)과 wären(가정)을 보기로 같이 놓는다. 3과에서 자세히.",
@@ -18,7 +23,12 @@ const GRAMMAR = [
      {q:"Der Zug ist pünktlich ___.", opts:["angekommen","ankommen","ankommt"], why:"ist + 과거분사: angekommen"},
      {q:"Ich ___ heute um sieben aufgestanden.", opts:["bin","habe","war"], why:"aufstehen(상태 변화) → bin aufgestanden"},
      {q:"Was ist denn ___?", opts:["passiert","passieren","passierte"], why:"ist + passiert. '무슨 일 있었어?' 통째로 암기!"},
-     {q:"Sie ___ letztes Jahr nach Berlin umgezogen.", opts:["ist","hat","wird"], why:"umziehen(이사=이동) → ist umgezogen"}
+     {q:"Sie ___ letztes Jahr nach Berlin umgezogen.", opts:["ist","hat","wird"], why:"umziehen(이사=이동) → ist umgezogen"},
+     {q:"Ich ___ gestern sehr spät eingeschlafen.", opts:["bin", "habe", "war"], why:"einschlafen(상태 변화) → bin eingeschlafen"},
+     {q:"Wann ___ ihr in Berlin angekommen?", opts:["seid", "habt", "werdet"], why:"ankommen(이동) → sein: seid angekommen"},
+     {q:"Er ist am Wochenende zu Hause ___.", opts:["geblieben", "bleibt", "bleiben"], why:"bleiben도 sein을 쓰는 예외! ist geblieben"},
+     {q:"Wir ___ mit dem Zug nach München gefahren.", opts:["sind", "haben", "waren"], why:"fahren(이동) → sind gefahren"},
+     {q:"Sie ___ heute früh aufgewacht.", opts:["ist", "hat", "wird"], why:"aufwachen(상태 변화) → ist aufgewacht"}
    ]},
   {id:"g03", title:"war/hatte(실제) vs wäre/hätte/würde(가정·정중)", rule:"생김새가 비슷한 두 세트를 구분하는 문제가 반드시 나온다.<br>실제 있었던 일(과거): war(~였다) · hatte(~가 있었다) · konnte(~할 수 있었다).<br>실제가 아닌 상상·가정·공손함: wäre(~라면 좋을 텐데) · hätte(~가 있다면) · würde(~할 텐데) · könnte(~해 주시겠어요).<br>점 두 개(움라우트)가 붙으면 '현실이 아니다'라는 신호다.", tip:"★ wenn(만약)이나 정중한 부탁이 보이면 → <mark>움라우트(wäre·hätte·könnte)</mark>! 그냥 과거 이야기면 → <mark>war·hatte</mark>!",
    detail:"<b>두 세트를 나란히 놓고 보자</b><br>· 실제 과거: war(였다) · hatte(있었다) · konnte(할 수 있었다) · musste(해야 했다) · wollte(하려고 했다) · durfte(해도 됐다)<br>· 가정·공손: wäre(~라면) · hätte(~가 있다면) · könnte(~해 주시겠어요) · würde(~할 텐데) · müsste(~해야 할 텐데)<br><br><b>가정·공손을 쓰는 3가지 상황</b><br>① 정중한 부탁: Könnten Sie mir helfen?(도와주시겠어요?) · Ich hätte gern einen Kaffee.(커피 주세요.)<br>② 희망·제안: Es wäre schön, wenn ...(~라면 좋겠어요) · Wir könnten ins Kino gehen.(영화 보러 가도 되겠다.)<br>③ 비현실 가정: Wenn ich Zeit hätte, würde ich reisen.(시간이 있다면 여행할 텐데.)<br><br><b>구분 요령</b><br>실제로 일어난 일이면 움라우트 없음(war·hatte), 상상이나 공손이면 움라우트(wäre·hätte).<br><br><b>시험 함정</b><br>wurde(실제로 ~이 되었다)와 würde(~할 텐데)는 점 두 개 차이로 뜻이 완전히 다르다!",
@@ -27,7 +37,12 @@ const GRAMMAR = [
      {q:"Es ___ schön, wenn du kommen könntest.", opts:["wäre","war","ist"], why:"'~라면 좋을 텐데' 가정 → wäre"},
      {q:"Ich ___ gern zwei Wochen am See bleiben.", opts:["würde","werde","wurde"], why:"정중한 희망 → würde ... bleiben"},
      {q:"___ Sie mir bitte helfen?", opts:["Könnten","Konnten","Können Sie nicht"], why:"정중한 부탁 → Könnten Sie...? (Konnten은 실제 과거)"},
-     {q:"Wir ___ keine Zeit, deshalb sind wir nicht gekommen.", opts:["hatten","hätten","haben"], why:"실제 과거(시간이 없었다) → hatten"}
+     {q:"Wir ___ keine Zeit, deshalb sind wir nicht gekommen.", opts:["hatten","hätten","haben"], why:"실제 과거(시간이 없었다) → hatten"},
+     {q:"Als Kind ___ ich viele Freunde.", opts:["hatte", "hätte", "habe"], why:"실제 과거 이야기 → hatte"},
+     {q:"___ du Lust, ins Kino zu gehen?", opts:["Hättest", "Hattest", "Hast du nicht"], why:"정중한 제안 → Hättest du Lust ...?"},
+     {q:"Das ___ eine tolle Idee!", opts:["wäre", "war", "wird"], why:"'그거 좋겠다!'(아직 안 일어난 상상) → wäre"},
+     {q:"Letztes Jahr ___ wir im Urlaub in Italien.", opts:["waren", "wären", "sind"], why:"실제 과거 → waren"},
+     {q:"An deiner Stelle ___ ich mehr schlafen.", opts:["würde", "werde", "wurde"], why:"조언(내가 너라면 = 비현실) → würde"}
    ]},
   {id:"g04", title:"형용사 어미 ① der/die/das 뒤", rule:"der/die/das 뒤에 오는 형용사 어미는 -e 아니면 -en, 딱 두 가지뿐이다.<br>단수 주격(문장의 주인공)이면 -e: der große Balkon(그 큰 발코니) · die letzte Party(지난 파티) · das beste Angebot(최고의 조건).<br>그 외에는 전부 -en: 남성 목적격(den großen) · Dativ(dem großen) · 복수(den großen Kindern).<br>im · am · zum은 안에 dem이 숨어 있어서(in dem) 자동으로 Dativ다.", tip:"★ 정관사 뒤는 -e 아니면 -en 둘 중 하나! im/am/zum이 보이면 → <mark>무조건 -en</mark>!",
    detail:"<b>규칙은 단 두 가지: -e 아니면 -en</b><br><br><b>-e를 쓰는 경우 (단수 주격)</b><br>· der große Balkon (남성 주어)<br>· die letzte Party (여성 주어/목적어)<br>· das beste Angebot (중성 주어/목적어)<br><br><b>-en을 쓰는 경우 (나머지 전부)</b><br>· 남성 목적격: Ich sehe den großen Balkon.<br>· Dativ 전부: mit dem neuen Auto · in der kleinen Stadt · im ersten Semester<br>· 복수 전부: die kleinen Kinder · mit den kleinen Kindern<br><br><b>숨은 Dativ 찾기 (시험 포인트)</b><br>im = in dem · am = an dem · zum = zu dem · beim = bei dem — 이 축약형이 보이면 무조건 -en!<br><br><b>요약</b><br>주격 단수 → -e / 그 외 몽땅 → -en. 헷갈리면 -en이 확률이 높다 (표의 대부분이 -en이다).",
@@ -36,7 +51,12 @@ const GRAMMAR = [
      {q:"Im ___ Semester hatte ich Probleme.", opts:["ersten","erste","erstes"], why:"im = in dem(Dativ) → -en"},
      {q:"Der ___ Balkon gefällt mir sehr.", opts:["große","großen","großes"], why:"der + 남성 주격 → -e"},
      {q:"Wir spielen mit den ___ Kindern.", opts:["kleinen","kleine","kleines"], why:"mit + Dativ 복수 → 무조건 -en"},
-     {q:"Das ist das ___ Angebot.", opts:["beste","besten","bestes"], why:"das + 중성 주격 → -e: das beste Angebot"}
+     {q:"Das ist das ___ Angebot.", opts:["beste","besten","bestes"], why:"das + 중성 주격 → -e: das beste Angebot"},
+     {q:"Der ___ Mann dort ist mein Chef.", opts:["alte", "alten", "alter"], why:"der + 남성 주격 → -e"},
+     {q:"Ich nehme den ___ Mantel.", opts:["schwarzen", "schwarze", "schwarzes"], why:"den(남성 목적격) → -en"},
+     {q:"Am ___ Wochenende fahren wir weg.", opts:["nächsten", "nächste", "nächstes"], why:"am = an dem(3격) → -en"},
+     {q:"Die ___ Schuhe gefallen mir sehr.", opts:["neuen", "neue", "neues"], why:"복수 → 전부 -en: die neuen Schuhe"},
+     {q:"Das ___ Wetter macht mich müde.", opts:["schlechte", "schlechten", "schlechter"], why:"das + 중성 주격 → -e"}
    ]},
   {id:"g05", title:"형용사 어미 ② ein/mein/kein 뒤", rule:"ein · kein · mein 같은 단어는 명사의 성별을 안 보여줘서, 형용사가 대신 그 역할을 한다.<br>남성 주격: ein neuer Job(-er) / 중성: ein gutes Angebot(-es) / 여성: eine schöne Wohnung(-e).<br>남성 목적격은 einen + -en: einen großen Balkon.<br>Dativ(einem/einer) 뒤는 언제나 -en: in einem alten Haus(오래된 집에서).", tip:"★ ein 뒤 빈칸이면 명사의 성별부터 확인! 남성(der)→-er, 중성(das)→-es, 여성(die)→ <mark>-e</mark>!",
    detail:"<b>왜 ein 뒤에서는 어미가 달라질까?</b><br>der/die/das는 성별을 보여주지만 ein은 남성인지 중성인지 안 보여준다. 그래서 형용사가 그 신호를 대신 낸다.<br><br><b>주격 (문장의 주인공)</b><br>· 남성: ein neuer Job (der의 -r을 형용사가 가져감)<br>· 중성: ein gutes Angebot (das의 -s를 가져감)<br>· 여성: eine schöne Wohnung (-e)<br><br><b>목적격</b><br>· 남성만 바뀜: einen großen Balkon (-en)<br>· 중성·여성은 주격과 동일: ein gutes Angebot · eine schöne Wohnung<br><br><b>Dativ (전치사 mit·in·bei·von 뒤 등)</b><br>· 전부 -en: in einem alten Haus · mit einer netten Kollegin<br><br><b>소유관사(mein·dein·unser)와 kein도 똑같이 적용된다</b><br>mein neuer Job · meinen Schlüssel · in meinem Zimmer",
@@ -45,7 +65,12 @@ const GRAMMAR = [
      {q:"Das ist ein ___ Angebot.", opts:["gutes","guter","guten"], why:"das Angebot → ein 뒤 중성 주격 -es"},
      {q:"Ich wohne in einem ___ Haus.", opts:["alten","altes","alter"], why:"in einem(Dativ) → -en"},
      {q:"Sie hat eine ___ Wohnung gefunden.", opts:["schöne","schönen","schönes"], why:"eine(여성) → -e"},
-     {q:"Mein ___ Job macht mir Spaß.", opts:["neuer","neuen","neues"], why:"der Job → mein 뒤 남성 주격 -er: mein neuer Job"}
+     {q:"Mein ___ Job macht mir Spaß.", opts:["neuer","neuen","neues"], why:"der Job → mein 뒤 남성 주격 -er: mein neuer Job"},
+     {q:"Er hat eine ___ Idee.", opts:["tolle", "tollen", "tolles"], why:"eine(여성) → -e"},
+     {q:"Wir suchen ein ___ Zimmer.", opts:["ruhiges", "ruhige", "ruhigen"], why:"das Zimmer → ein + 중성 -es"},
+     {q:"Sie wohnt in einer ___ Stadt.", opts:["kleinen", "kleine", "kleines"], why:"in einer(3격) → -en"},
+     {q:"Das ist ein ___ Tag für uns.", opts:["wichtiger", "wichtige", "wichtiges"], why:"der Tag → ein + 남성 주격 -er"},
+     {q:"Ich brauche einen ___ Computer.", opts:["neuen", "neuer", "neues"], why:"einen(남성 목적격) → -en"}
    ]},
   {id:"g06", title:"비교급 -er als / 최상급 am -sten", rule:"비교급은 형용사 + -er: schwierig(어려운) → schwieriger(더 어려운). '~보다'는 als.<br>최상급은 am ...-sten: am schönsten(가장 아름다운), 또는 관사와 함께: der schlimmste Tag(최악의 날).<br>짧은 형용사는 움라우트가 붙는다: warm→wärmer · groß→größer · alt→älter.<br>불규칙 3형제는 통암기: gut→besser→am besten / viel→mehr→am meisten / gern→lieber→am liebsten.", tip:"★ als(~보다)가 보이면 → <mark>비교급 -er</mark>! am이 보이면 → <mark>최상급 -sten</mark>!",
    detail:"<b>비교급: -er + als</b><br>· schwierig → schwieriger als (~보다 어려운)<br>· 독일어는 아무리 긴 형용사도 -er를 붙인다 (영어의 more ~ 같은 형태 없음): interessanter<br><br><b>움라우트가 붙는 짧은 형용사</b><br>alt→älter · groß→größer · warm→wärmer · lang→länger · jung→jünger · kurz→kürzer · kalt→kälter<br><br><b>최상급: am -sten / 관사 + -ste</b><br>· Am besten gefällt mir der Garten. (술어로 쓸 때)<br>· der schlimmste Tag · das beste Angebot (명사 앞에 쓸 때)<br><br><b>불규칙 (통암기 필수)</b><br>gut → besser → am besten<br>viel → mehr → am meisten<br>gern → lieber → am liebsten<br>hoch → höher → am höchsten<br>nah → näher → am nächsten<br><br><b>같음 비교</b><br>so ... wie: Er ist so groß wie ich. (그는 나만큼 크다) — als와 wie를 구분하는 문제도 나온다!",
@@ -54,7 +79,12 @@ const GRAMMAR = [
      {q:"Das war der ___ Tag des Jahres.", opts:["schlimmste","schlimmer","schlimm"], why:"der + 최상급: der schlimmste Tag"},
      {q:"Am ___ gefällt mir der große Garten.", opts:["besten","besseren","gut"], why:"am + 최상급: am besten"},
      {q:"Meine neue Wohnung ist ___ als die alte.", opts:["größer","groß","am größten"], why:"als 앞 → 비교급 größer (움라우트!)"},
-     {q:"Gesundheit ist das ___ im Leben.", opts:["Wichtigste","Wichtigere","Wichtig"], why:"das + 최상급 명사화: das Wichtigste"}
+     {q:"Gesundheit ist das ___ im Leben.", opts:["Wichtigste","Wichtigere","Wichtig"], why:"das + 최상급 명사화: das Wichtigste"},
+     {q:"Mein Bruder ist ___ als ich.", opts:["älter", "alt", "am ältesten"], why:"als → 비교급 älter (움라우트!)"},
+     {q:"Das ist die ___ Lösung.", opts:["einfachste", "einfacher", "einfach"], why:"die + 최상급: die einfachste Lösung"},
+     {q:"Ich trinke ___ Tee als Kaffee.", opts:["lieber", "gern", "am liebsten"], why:"gern의 비교급 → lieber (+ als)"},
+     {q:"Heute geht es mir ___ als gestern.", opts:["besser", "gut", "am besten"], why:"gut → besser (als 비교)"},
+     {q:"Im Sommer sind die Tage am ___.", opts:["längsten", "länger", "lang"], why:"am + 최상급 → am längsten"}
    ]},
   {id:"g07", title:"mir냐 mich냐 — 인칭대명사 격", rule:"대부분의 동사는 목적어로 Akkusativ(mich 나를 · dich 너를 · Sie 당신을)를 쓴다.<br>하지만 몇몇 동사는 반드시 Dativ(mir 나에게 · dir 너에게 · Ihnen 당신에게)를 쓴다.<br>Dativ 동사 대표: helfen(돕다) · danken(감사하다) · gefallen(마음에 들다) · gehören(~의 것이다) · schmecken(입에 맞다).<br>Wie geht es dir?(어떻게 지내?)의 es geht도 Dativ와 쓴다.", tip:"★ helfen·danken·gefallen·gehören이 보이면 → <mark>mir/dir/Ihnen</mark>! 나머지는 대부분 mich/dich!",
    detail:"<b>인칭대명사 격변화 표</b><br>ich → mich(나를) / mir(나에게)<br>du → dich / dir<br>er → ihn / ihm<br>sie → sie / ihr<br>wir → uns / uns<br>ihr → euch / euch<br>Sie → Sie / Ihnen<br><br><b>Dativ를 쓰는 동사 (외우자)</b><br>helfen(돕다) · danken(감사하다) · gefallen(마음에 들다) · gehören(~의 것이다) · schmecken(입에 맞다) · passen(맞다·어울리다) · antworten(대답하다) · glauben(믿다) · wehtun(아프게 하다) · gratulieren(축하하다)<br><br><b>고정 표현 (전부 Dativ)</b><br>· Wie geht es dir/Ihnen? (어떻게 지내?)<br>· Es tut mir leid. (미안해요)<br>· Das ist mir wichtig/egal. (나에게 중요해/상관없어)<br><br><b>구분 요령</b><br>'~를'로 해석되면 Akkusativ(mich), '~에게'로 해석되면 Dativ(mir)가 기본. 단, 위 목록의 동사들은 해석과 상관없이 무조건 Dativ!",
@@ -63,7 +93,12 @@ const GRAMMAR = [
      {q:"Ich rufe ___ morgen an.", opts:["dich","dir","du"], why:"anrufen은 Akkusativ: dich"},
      {q:"Wie geht es ___?", opts:["dir","dich","du"], why:"es geht + Dativ: Wie geht es dir?"},
      {q:"Ich danke ___ für die Einladung.", opts:["Ihnen","Sie","Ihr"], why:"danken은 Dativ: Ihnen"},
-     {q:"Besuchst du ___ am Wochenende?", opts:["uns","wir","unser"], why:"besuchen은 Akkusativ: uns"}
+     {q:"Besuchst du ___ am Wochenende?", opts:["uns","wir","unser"], why:"besuchen은 Akkusativ: uns"},
+     {q:"Das Kleid steht ___ sehr gut.", opts:["dir", "dich", "du"], why:"stehen(어울리다)은 3격: dir"},
+     {q:"Ich verstehe ___ nicht.", opts:["dich", "dir", "du"], why:"verstehen은 4격: dich"},
+     {q:"Schmeckt ___ die Suppe?", opts:["dir", "dich", "deiner"], why:"schmecken + 3격: dir"},
+     {q:"Er hat ___ zum Essen eingeladen.", opts:["uns", "wir", "unser"], why:"einladen + 4격: uns"},
+     {q:"Das Auto gehört ___.", opts:["ihm", "ihn", "er"], why:"gehören + 3격: ihm(그에게)"}
    ]},
   {id:"g08", title:"소유관사: mein/meinen/meinem", rule:"mein(나의) · dein(너의) · sein(그의) · ihr(그녀의) · unser(우리의)는 ein과 똑같이 변한다.<br>남성 주격: mein neuer Job / 남성 목적격: meinen Schlüssel — 끝의 -en이 포인트!<br>Dativ: meinem Mann(남성·중성) · meiner Frau(여성).<br>여성·복수의 주격/목적격은 -e: meine Frau · meine Kinder.", tip:"★ 빈칸 뒤 명사가 남성(der)이고 목적어 자리면 → <mark>-en(meinen·deinen·unseren)</mark>!",
    detail:"<b>누구의 것인지에 따라</b><br>ich → mein(나의) / du → dein(너의) / er·es → sein(그의) / sie → ihr(그녀의) / wir → unser(우리의) / ihr → euer(너희의) / sie·Sie → ihr·Ihr(그들의·당신의)<br><br><b>변화는 ein과 100% 동일</b><br>· 남성 주격: mein neuer Job<br>· 남성 목적격: meinen Schlüssel (-en!)<br>· 중성: mein Zimmer / 여성·복수: meine Frau · meine Kinder<br>· Dativ: meinem Mann · meiner Frau · meinen Kindern<br><br><b>euer의 특별 규칙</b><br>어미가 붙으면 가운데 e가 빠진다: euer Haus → eure Wohnung → in eurem Haus<br><br><b>sein vs ihr 함정</b><br>sein = 그(남자)의 · ihr = 그녀의/그들의. 문맥에서 주인이 남자인지 여자인지 확인하는 문제가 나온다.<br>· Paul und seine Frau (파울과 그의 아내)<br>· Anna und ihr Mann (안나와 그녀의 남편)",
@@ -72,7 +107,12 @@ const GRAMMAR = [
      {q:"Ich habe ___ Schlüssel verloren.", opts:["meinen","mein","meinem"], why:"남성 목적격(Akk.) → meinen"},
      {q:"Wie findest du ___ neue Wohnung?", opts:["unsere","unser","unseren"], why:"die Wohnung(여성 Akk.) → unsere"},
      {q:"Gefällt dir ___ Zimmer? (das Zimmer)", opts:["dein","deine","deinen"], why:"중성 주격 → dein"},
-     {q:"Er kommt mit ___ Frau.", opts:["seiner","seine","sein"], why:"mit + Dativ 여성 → seiner"}
+     {q:"Er kommt mit ___ Frau.", opts:["seiner","seine","sein"], why:"mit + Dativ 여성 → seiner"},
+     {q:"Wo ist ___ Tasche? (너의 · die)", opts:["deine", "dein", "deinen"], why:"여성 → deine"},
+     {q:"Er sucht ___ Handy. (그의 · das)", opts:["sein", "seine", "seinen"], why:"중성 목적격 → sein (변화 없음)"},
+     {q:"Wir besuchen ___ Eltern. (우리의)", opts:["unsere", "unser", "unserer"], why:"복수 목적격 → unsere"},
+     {q:"Sie fährt mit ___ Auto. (그녀의 · das)", opts:["ihrem", "ihr", "ihren"], why:"mit + 3격 중성 → ihrem"},
+     {q:"Ich habe ___ Bruder angerufen. (나의 · der)", opts:["meinen", "mein", "meinem"], why:"남성 목적격 → meinen"}
    ]},
   {id:"g09", title:"weil / denn / deshalb / obwohl / trotzdem", rule:"뜻이 비슷해도 뒤따르는 어순이 달라서, telc는 어순으로 답을 가른다.<br>이유: weil(~때문에)은 동사를 맨 끝으로 · denn(왜냐하면)은 어순 그대로 · deshalb(그래서)는 동사가 바로 뒤(도치).<br>양보(반대인데도): obwohl(~인데도)은 동사 맨 끝 · trotzdem(그럼에도)은 도치.<br>먼저 내용이 이유인지 양보인지 정하고, 그다음 빈칸 뒤 어순을 확인한다.", tip:"★ 빈칸 뒤 어순이 답이다: 동사가 맨 끝에 있으면 → <mark>weil/obwohl</mark>! 동사가 바로 오면 → <mark>deshalb/trotzdem</mark>!",
    detail:"<b>어순 3그룹으로 정리하면 끝</b><br><br><b>① 동사를 맨 끝으로 (부문장 접속사)</b><br>weil(~때문에) · obwohl(~인데도) · wenn(~하면) · dass(~라는 것) · ob(~인지) · als(~했을 때) · damit(~하도록) · sobald(~하자마자)<br>→ Ich bleibe zu Hause, weil ich krank bin.<br><br><b>② 동사가 바로 뒤 (도치 부사)</b><br>deshalb(그래서) · trotzdem(그럼에도) · dann(그다음에) · danach(그 후에) · außerdem(게다가) · sonst(안 그러면)<br>→ Ich bin krank, deshalb bleibe ich zu Hause.<br><br><b>③ 어순 그대로 (0번 자리)</b><br>und(그리고) · oder(또는) · aber(하지만) · denn(왜냐하면)<br>→ Ich bleibe zu Hause, denn ich bin krank.<br><br><b>뜻 짝꿍</b><br>이유: weil = denn = deshalb / 양보: obwohl = trotzdem<br><br><b>풀이 순서</b><br>① 내용이 이유인지 반대(양보)인지 → ② 빈칸 뒤 동사 위치 확인 → 답 확정",
@@ -81,7 +121,12 @@ const GRAMMAR = [
      {q:"Ich bin krank, ___ bleibe ich zu Hause.", opts:["deshalb","weil","obwohl"], why:"빈칸 바로 뒤에 동사(bleibe) = 도치 → deshalb"},
      {q:"Er geht arbeiten, ___ er erkältet ist.", opts:["obwohl","deshalb","denn"], why:"아픈데도 일하러 감(양보) + 동사 끝 → obwohl"},
      {q:"Es regnet, ___ gehen wir spazieren.", opts:["trotzdem","weil","denn"], why:"비 오는데도(양보) + 도치 → trotzdem"},
-     {q:"Ich lerne Deutsch, ___ ich in Deutschland wohne.", opts:["weil","denn","trotzdem"], why:"동사가 맨 끝(wohne) → weil. denn이면 'denn ich wohne...'"}
+     {q:"Ich lerne Deutsch, ___ ich in Deutschland wohne.", opts:["weil","denn","trotzdem"], why:"동사가 맨 끝(wohne) → weil. denn이면 'denn ich wohne...'"},
+     {q:"Er lernt viel, ___ er die Prüfung bestehen will.", opts:["weil", "deshalb", "denn"], why:"동사(will)가 맨 끝 → weil"},
+     {q:"Es regnet stark, ___ nehme ich den Bus.", opts:["deshalb", "weil", "obwohl"], why:"빈칸 뒤 동사 바로(도치) → deshalb"},
+     {q:"___ er müde war, hat er weitergearbeitet.", opts:["Obwohl", "Weil", "Deshalb"], why:"피곤한데도 계속 일함(양보) + 동사 끝 → obwohl"},
+     {q:"Ich habe Hunger, ___ ich habe heute nichts gegessen.", opts:["denn", "weil", "deshalb"], why:"어순 그대로(ich habe) → denn"},
+     {q:"Das Ticket war teuer, ___ bin ich gefahren.", opts:["trotzdem", "weil", "denn"], why:"비쌌지만 그래도 갔다(양보+도치) → trotzdem"}
    ]},
   {id:"g10", title:"dass / ob / wenn / als", rule:"dass(~라는 것): 확실한 내용을 전할 때. Ich glaube, dass ...(나는 ~라고 생각해).<br>ob(~인지 아닌지): Ja/Nein으로 답할 질문을 문장 안에 넣을 때. Ich weiß nicht, ob ...(~인지 모르겠어).<br>wenn(~하면, ~할 때마다): 조건이나 반복되는 일.<br>als(~했을 때): 과거에 딱 한 번 있었던 시기. Als ich Kind war ...(내가 아이였을 때).", tip:"★ '~인지 아닌지'로 해석되면 → <mark>ob</mark>! 과거의 한 시절이면 → <mark>als</mark>! 넷 다 동사는 맨 끝!",
    detail:"<b>네 가지를 상황별로</b><br><br><b>dass (~라는 것)</b><br>확실한 내용을 전달: glauben·denken·hoffen·finden·wissen 뒤.<br>· Ich glaube, dass er recht hat.<br><br><b>ob (~인지 아닌지)</b><br>Ja/Nein 질문을 문장 속에 넣을 때: wissen nicht·fragen·keine Ahnung 뒤.<br>· Ich weiß nicht, ob er kommt. (올지 안 올지)<br>· Können Sie mir sagen, ob das Angebot noch gilt?<br><br><b>wenn (~하면 / ~할 때마다)</b><br>조건·반복·미래: Wenn es regnet, ... (비가 오면) · Immer wenn ich müde bin, ... (피곤할 때마다)<br><br><b>als (~했을 때)</b><br>과거에 딱 한 번 있었던 시기·사건: Als ich Kind war, ... (어렸을 때)<br><br><b>wenn vs als 구분법 (시험 최애)</b><br>과거 + 한 번뿐인 일 → als / 그 외 전부(현재·미래·반복) → wenn<br><br><b>공통점</b><br>넷 다 부문장: 동사는 맨 끝!",
@@ -90,7 +135,12 @@ const GRAMMAR = [
      {q:"Ich glaube, ___ das eine gute Idee ist.", opts:["dass","ob","als"], why:"믿는 내용 → dass"},
      {q:"___ es regnet, nehme ich den Bus.", opts:["Wenn","Als","Ob"], why:"조건(비가 오면) → wenn"},
      {q:"___ ich Kind war, habe ich in Seoul gewohnt.", opts:["Als","Wenn","Ob"], why:"과거의 한 시기 → als (wenn은 반복될 때)"},
-     {q:"Können Sie mir sagen, ___ das Angebot noch gilt?", opts:["ob","dass","weil"], why:"유효한지 아닌지 질문 → ob"}
+     {q:"Können Sie mir sagen, ___ das Angebot noch gilt?", opts:["ob","dass","weil"], why:"유효한지 아닌지 질문 → ob"},
+     {q:"Weißt du, ___ der Kurs heute stattfindet?", opts:["ob", "dass", "wenn"], why:"열리는지 아닌지(Ja/Nein) → ob"},
+     {q:"Ich hoffe, ___ du bald gesund wirst.", opts:["dass", "ob", "als"], why:"희망하는 내용 → dass"},
+     {q:"___ ich in Deutschland ankam, war alles neu.", opts:["Als", "Wenn", "Ob"], why:"과거의 한 시점 → als"},
+     {q:"Ruf mich an, ___ du Zeit hast.", opts:["wenn", "als", "dass"], why:"조건(시간 있으면) → wenn"},
+     {q:"Es ist wichtig, ___ man jeden Tag übt.", opts:["dass", "ob", "weil"], why:"확실한 내용 전달 → dass"}
    ]},
   {id:"g11", title:"목적 표현: um...zu / damit / sobald", rule:"'~하기 위해서'를 말하는 방법은 두 가지다.<br>앞뒤 주어가 같으면: um ... zu + 동사원형. Ich lerne Deutsch, um die Prüfung zu bestehen(시험에 합격하기 위해).<br>주어가 다르면: damit + 부문장. Ich schreibe dir, damit du Bescheid weißt(네가 알 수 있도록).<br>sobald(~하자마자)도 같은 자리에 자주 나온다: Ich melde mich, sobald ich mehr weiß(더 알게 되는 대로 연락할게).", tip:"★ 빈칸 뒤에 zu + 동사원형이 보이면 → <mark>무조건 um</mark>! 새로운 주어가 나오면 → <mark>damit</mark>!",
    detail:"<b>목적을 말하는 두 가지</b><br><br><b>um ... zu + 동사원형 (주어가 같을 때)</b><br>· Ich lerne Deutsch, um die Prüfung zu bestehen. (내가 공부, 내가 합격)<br>· 분리동사는 zu가 사이에 낀다: um früh aufzustehen (일찍 일어나기 위해)<br>· 주어를 다시 쓰지 않는다!<br><br><b>damit + 부문장 (주어가 다를 때)</b><br>· Ich schreibe dir, damit du Bescheid weißt. (내가 쓰고, 네가 알도록)<br>· 동사는 맨 끝, 주어를 꼭 쓴다.<br><br><b>시험 요령</b><br>빈칸 뒤에 zu + 동사원형이 있으면 um, 새 주어가 등장하면 damit.<br><br><b>보너스 시간 접속사 (전부 동사 맨 끝)</b><br>· sobald(~하자마자): Ich melde mich, sobald ich mehr weiß.<br>· während(~하는 동안): Während ich koche, hört er Musik.<br>· bevor(~하기 전에): Bevor du gehst, ruf mich an.",
@@ -99,7 +149,12 @@ const GRAMMAR = [
      {q:"Ich schreibe dir, ___ du Bescheid weißt.", opts:["damit","um","als"], why:"주어가 다름(ich→du) → damit"},
      {q:"Wir sparen, ___ wir ein Auto kaufen können.", opts:["damit","um","denn"], why:"damit + 부문장(동사 끝)"},
      {q:"Ich melde mich, ___ ich mehr weiß.", opts:["sobald","damit","um"], why:"'더 알게 되자마자 연락할게' → sobald"},
-     {q:"Er macht einen Kurs, ___ besser Deutsch zu sprechen.", opts:["um","damit","weil"], why:"zu sprechen이 있으니 um ... zu"}
+     {q:"Er macht einen Kurs, ___ besser Deutsch zu sprechen.", opts:["um","damit","weil"], why:"zu sprechen이 있으니 um ... zu"},
+     {q:"Ich gehe früh ins Bett, ___ morgen fit zu sein.", opts:["um", "damit", "ohne"], why:"zu + 원형이 보이면 → um ... zu"},
+     {q:"Sprich bitte lauter, ___ alle dich verstehen.", opts:["damit", "um", "weil"], why:"주어가 다름(alle) → damit"},
+     {q:"Er spart Geld, ___ eine große Reise zu machen.", opts:["um", "damit", "statt"], why:"같은 주어 + zu → um ... zu"},
+     {q:"Ich rufe dich an, ___ ich am Flughafen bin.", opts:["sobald", "damit", "um"], why:"~하자마자 → sobald"},
+     {q:"Sie lernt Deutsch, ___ sie hier arbeiten kann.", opts:["damit", "um", "ohne"], why:"damit + 부문장(kann가 맨 끝)"}
    ]},
   {id:"g12", title:"시간 전치사: um / am / im / seit / vor", rule:"시각에는 um: um 9 Uhr(9시에).<br>요일·날짜에는 am: am Samstag(토요일에) · am 13. März(3월 13일에).<br>월·계절·연도에는 im: im Oktober(10월에) · im Winter(겨울에).<br>seit(~부터 지금까지)는 아직 계속되는 일 — 그래서 현재형과 쓴다: Ich wohne seit einem Jahr hier.<br>vor(~전에)는 이미 끝난 일: vor drei Tagen(3일 전에).", tip:"★ 시각 → <mark>um</mark>! 요일 → <mark>am</mark>! 월·계절 → <mark>im</mark>! 지금도 계속이면 → seit, 끝난 일이면 → <mark>vor</mark>!",
    detail:"<b>시각·요일·월 3형제</b><br>· um + 시각: um 9 Uhr(9시에) · um halb acht(7시 반에)<br>· am + 요일·날짜·하루의 부분: am Montag(월요일에) · am 13. März · am Wochenende(주말에) · am Abend(저녁에)<br>· im + 월·계절·연도: im Oktober(10월에) · im Sommer(여름에) · im Jahr 2026<br>· 예외: in der Nacht(밤에)<br><br><b>seit vs vor (최다 출제)</b><br>· seit + Dativ = ~부터 지금까지 계속 → 현재형과 쓴다!<br>Ich wohne seit einem Jahr hier. (1년 전부터 지금도 산다)<br>· vor + Dativ = ~전에 (끝난 일) → 과거형과 쓴다<br>Ich habe ihn vor drei Tagen getroffen. (3일 전에 만났다)<br><br><b>그 외 자주 나오는 것</b><br>· ab: ~부터 (미래 시작점) — ab morgen(내일부터)<br>· von ... bis: ~부터 ~까지 — von 10 bis 14 Uhr<br>· in: ~후에 — in zwei Wochen(2주 후에)<br>· nach: ~후에 — nach dem Essen(식사 후에)",
@@ -108,7 +163,12 @@ const GRAMMAR = [
      {q:"___ Samstag habe ich endlich Zeit.", opts:["Am","Um","Im"], why:"요일 → am Samstag"},
      {q:"___ Oktober drehen wir das Video in Berlin.", opts:["Im","Am","Um"], why:"월 → im Oktober"},
      {q:"Ich wohne ___ einem Jahr in Frankfurt.", opts:["seit","vor","um"], why:"1년 전부터 지금도 살고 있음 → seit"},
-     {q:"Ich habe ihn ___ drei Tagen getroffen.", opts:["vor","seit","um"], why:"3일 전에(끝난 일) → vor"}
+     {q:"Ich habe ihn ___ drei Tagen getroffen.", opts:["vor","seit","um"], why:"3일 전에(끝난 일) → vor"},
+     {q:"___ Abend sehe ich meistens fern.", opts:["Am", "Um", "Im"], why:"하루의 부분 → am Abend"},
+     {q:"Der Deutschkurs beginnt ___ halb sieben.", opts:["um", "am", "im"], why:"시각 → um halb sieben"},
+     {q:"___ Winter fahren wir in die Berge.", opts:["Im", "Am", "Um"], why:"계절 → im Winter"},
+     {q:"Er lernt ___ zwei Monaten Deutsch.", opts:["seit", "vor", "um"], why:"두 달 전부터 지금도 → seit (+현재형)"},
+     {q:"Wir haben uns ___ einer Woche getroffen.", opts:["vor", "seit", "in"], why:"일주일 전에(끝난 일) → vor"}
    ]},
   {id:"g13", title:"동사와 짝인 전치사: auf / bei / mit / an", rule:"독일어 동사는 정해진 전치사와 세트로 다닌다 — 전치사만 보고 답을 고르는 문제가 나온다.<br>warten auf(~을 기다리다) · sich freuen auf(앞으로 올 일을 기대하다) · sich freuen über(이미 받은 것에 기뻐하다).<br>denken an(~을 생각하다) · sich erinnern an(~을 기억하다) · sprechen über(~에 대해 말하다).<br>arbeiten bei(~회사에서 일하다) · fahren mit(~을 타고 가다) · danken für(~에 감사하다).", tip:"★ 동사를 보면 전치사가 자동으로 튀어나오게 세트로 암기! warten? → <mark>auf</mark>!",
    detail:"<b>자주 나오는 동사+전치사 세트 (격까지 통째로)</b><br><br><b>auf + Akkusativ</b><br>· warten auf(~을 기다리다) · sich freuen auf(앞일을 기대하다) · Lust haben auf(~이 하고 싶다)<br><br><b>über + Akkusativ</b><br>· sprechen über(~에 대해 말하다) · denken über(~에 대해 생각하다) · sich freuen über(받은 것에 기뻐하다) · sich ärgern über(~에 화나다)<br><br><b>an</b><br>· denken an + Akk(~을 생각하다) · sich erinnern an + Akk(~을 기억하다) · teilnehmen an + Dat(~에 참가하다)<br><br><b>기타</b><br>· sich interessieren für + Akk(~에 관심 있다)<br>· Angst haben vor + Dat(~을 무서워하다)<br>· träumen von + Dat(~을 꿈꾸다)<br>· sich bewerben um + Akk(~에 지원하다)<br>· danken für + Akk(~에 감사하다)<br>· arbeiten bei + Dat(~회사에서 일하다)<br><br><b>freuen 구분 (시험 포인트)</b><br>auf = 아직 안 온 것(기대) / über = 이미 받은 것(기쁨)<br>· Ich freue mich auf das Wochenende. (주말이 기대돼)<br>· Ich freue mich über das Geschenk. (선물 받아서 기뻐)",
@@ -117,7 +177,12 @@ const GRAMMAR = [
      {q:"Ich fahre ___ dem Bus zur Arbeit.", opts:["mit","bei","von"], why:"교통수단 → mit + Dativ"},
      {q:"Die Nummer steht ___ meinem Ausweis.", opts:["auf","an","bei"], why:"카드·종이 위에 적힘 → auf"},
      {q:"Wir warten schon lange ___ den Bus.", opts:["auf","an","mit"], why:"warten auf + Akk. 세트 암기!"},
-     {q:"Ich freue mich ___ das Wochenende.", opts:["auf","über","mit"], why:"앞으로 올 일 기대 → sich freuen auf"}
+     {q:"Ich freue mich ___ das Wochenende.", opts:["auf","über","mit"], why:"앞으로 올 일 기대 → sich freuen auf"},
+     {q:"Ich interessiere mich ___ deutsche Musik.", opts:["für", "auf", "an"], why:"sich interessieren für + 4격"},
+     {q:"Sie hat Angst ___ großen Hunden.", opts:["vor", "von", "auf"], why:"Angst haben vor + 3격"},
+     {q:"Wir sprechen gerade ___ das Problem.", opts:["über", "auf", "an"], why:"sprechen über + 4격"},
+     {q:"Ich träume ___ einem Haus am Meer.", opts:["von", "über", "an"], why:"träumen von + 3격"},
+     {q:"Er nimmt ___ einem Deutschkurs teil.", opts:["an", "auf", "bei"], why:"teilnehmen an + 3격"}
    ]},
   {id:"g14", title:"da-합성어: dafür / darauf / darüber / daran", rule:"앞에서 말한 내용을 반복하지 않고 다시 받을 때 da(r)+전치사를 쓴다.<br>Sport ist wichtig. Meine Kasse bezahlt dafür.(운동은 중요하다. 보험이 그것에 돈을 낸다.)<br>어떤 전치사를 쓸지는 동사+전치사 세트(13과)가 결정한다.<br>denken über → darüber · sich freuen auf → darauf · bezahlen für → dafür · sich erinnern an → daran.", tip:"★ 빈칸이 문장 끝에 혼자 있고 앞 문장 내용을 가리키면 → <mark>da(r) + 그 동사의 전치사</mark>!",
    detail:"<b>형태 규칙</b><br>· 전치사가 자음으로 시작 → da + 전치사: dafür · damit · davon · dabei<br>· 전치사가 모음으로 시작 → dar + 전치사: darauf · darüber · daran · darin<br><br><b>언제 쓰나?</b><br>앞에서 말한 사물·내용을 반복하지 않고 받을 때.<br>· Kommst du mit ins Kino? — Ja, ich habe Lust darauf. (= Lust auf das Kino)<br>· Wir waren in Spanien. Erinnerst du dich daran?<br><br><b>주의: 사람은 da-합성어를 못 쓴다!</b><br>· 사물: Ich warte darauf. (버스를)<br>· 사람: Ich warte auf ihn. (그를) — 전치사 + 인칭대명사<br><br><b>질문형은 wo(r)+전치사</b><br>· Worauf wartest du? (뭘 기다려?)<br>· Wofür interessierst du dich? (뭐에 관심 있어?)<br><br><b>풀이 요령</b><br>빈칸 문장의 동사를 찾고 → 그 동사의 짝 전치사(13과)를 떠올리고 → da(r)+그 전치사를 고른다.",
@@ -126,7 +191,12 @@ const GRAMMAR = [
      {q:"Das ist meine Idee. Was denkst du ___?", opts:["darüber","dafür","davor"], why:"denken über → darüber"},
      {q:"Ich freue mich schon ___, dich zu sehen.", opts:["darauf","darüber","daran"], why:"sich freuen auf → darauf"},
      {q:"Wir waren zusammen in Spanien. Erinnerst du dich ___?", opts:["daran","darauf","darüber"], why:"sich erinnern an → daran"},
-     {q:"Wir gehen Pizza essen. Hast du Lust ___?", opts:["darauf","daran","damit"], why:"Lust auf → darauf"}
+     {q:"Wir gehen Pizza essen. Hast du Lust ___?", opts:["darauf","daran","damit"], why:"Lust auf → darauf"},
+     {q:"Kommst du mit ins Kino? — Ja, ich habe Lust ___.", opts:["darauf", "daran", "dafür"], why:"Lust auf → darauf"},
+     {q:"Das Wetter ist schlecht. Alle sprechen ___.", opts:["darüber", "darauf", "davon"], why:"sprechen über → darüber"},
+     {q:"Korea? Ich denke jeden Tag ___.", opts:["daran", "darüber", "darauf"], why:"denken an → daran"},
+     {q:"Die Prüfung ist bald. Ich bereite mich ___ vor.", opts:["darauf", "daran", "dafür"], why:"sich vorbereiten auf → darauf"},
+     {q:"Danke für das Geschenk! Ich freue mich sehr ___.", opts:["darüber", "darauf", "damit"], why:"이미 받은 것에 기뻐함 → sich freuen über → darüber"}
    ]},
   {id:"g15", title:"의문사: wo / wohin / woher / wann / wie", rule:"wo(어디에): 위치를 물을 때. Wo wohnst du?(어디 살아?)<br>wohin(어디로): 방향·목적지. Wohin fährst du? — Nach Berlin.<br>woher(어디에서): 출신·출처. Woher kommst du? — Aus Korea.<br>wann(언제) · wie(어떻게) · wie lange(얼마나 오래) · wie viel(얼마나 많이).", tip:"★ 대답이 힌트다: nach/in(방향)이면 → <mark>wohin</mark>! aus/von(출처)이면 → <mark>woher</mark>! 그냥 위치면 → <mark>wo</mark>!",
    detail:"<b>장소 3형제 (최다 출제)</b><br>· wo(어디에): 위치 — Wo wohnst du? — In Frankfurt.<br>· wohin(어디로): 방향 — Wohin fährst du? — Nach Berlin.<br>· woher(어디에서): 출처 — Woher kommst du? — Aus Korea.<br><br><b>사람을 물을 때 (격 주의)</b><br>· wer(누가): Wer ist das?<br>· wen(누구를): Wen besuchst du?<br>· wem(누구에게): Wem gehört das Handy?<br><br><b>wie + 형용사 조합</b><br>· wie lange(얼마나 오래) · wie oft(얼마나 자주) · wie viel(얼마나 많이) · wie alt(몇 살) · wie spät(몇 시)<br><br><b>기타</b><br>· wann(언제) · warum(왜) · was(무엇) · welcher/welche/welches(어느 것)<br><br><b>풀이 요령</b><br>대답을 보면 답이 나온다: nach/in+도시(방향)→wohin · aus/von(출처)→woher · 시간 표현→wann · 기간→wie lange",
@@ -135,7 +205,12 @@ const GRAMMAR = [
      {q:"___ ziehst du um? — Nach Berlin.", opts:["Wohin","Wo","Woher"], why:"이사 가는 방향 → wohin"},
      {q:"___ kommst du gerade? — Vom Arzt.", opts:["Woher","Wohin","Wo"], why:"출처(어디에서 오는 길) → woher"},
      {q:"___ beginnt der Deutschkurs?", opts:["Wann","Wie","Wo"], why:"시작 시점 → wann"},
-     {q:"___ lange wohnst du schon hier?", opts:["Wie","Wann","Wo"], why:"wie lange = 얼마나 오래"}
+     {q:"___ lange wohnst du schon hier?", opts:["Wie","Wann","Wo"], why:"wie lange = 얼마나 오래"},
+     {q:"___ fährt dieser Bus? — Zum Bahnhof.", opts:["Wohin", "Wo", "Woher"], why:"대답이 방향(zum) → wohin"},
+     {q:"___ hast du Deutsch gelernt? — In der Schule.", opts:["Wo", "Wohin", "Woher"], why:"장소 → wo"},
+     {q:"___ oft gehst du ins Fitnessstudio?", opts:["Wie", "Wann", "Wo"], why:"wie oft = 얼마나 자주"},
+     {q:"___ kostet das Ticket? — Zehn Euro.", opts:["Wie viel", "Wie lange", "Wann"], why:"가격 → wie viel"},
+     {q:"___ kommt deine Frau? — Aus Korea.", opts:["Woher", "Wohin", "Wo"], why:"출신(aus) → woher"}
    ]},
 
   {id:"g16", title:"정관사 격변화 der/des/dem/den", rule:"명사의 <mark>격(자리)</mark>에 따라 der가 변한다.<br>주어(1격) der · 소유(2격) des · <mark>~에게(3격) dem</mark> · <mark>~를(4격) den</mark>.<br>여성·복수는 3격에서 특히 헷갈리니 표로 외우자.", tip:"★ 남성만 4격에서 변한다(der→den)! ★ 3격은 남성·중성 <mark>dem</mark>, 여성 <mark>der</mark>, 복수 <mark>den</mark>(+명사에 -n)!",
@@ -145,7 +220,12 @@ const GRAMMAR = [
      {q:"Ich sehe ___ Mann. (der Mann · ~를)", opts:["den","dem","der"], why:"~를 = 4격, 남성 → den (남성만 변함!)"},
      {q:"Ich fahre mit ___ Bus. (der Bus)", opts:["dem","den","der"], why:"mit는 3격 지배 → 남성 dem"},
      {q:"Das ist das Auto ___ Frau. (die Frau · ~의)", opts:["der","die","dem"], why:"~의 = 2격, 여성 → der"},
-     {q:"Ich spiele mit ___ Kindern. (die Kinder · 복수)", opts:["den","die","der"], why:"복수 3격 → den (+명사 -n: Kindern)"}
+     {q:"Ich spiele mit ___ Kindern. (die Kinder · 복수)", opts:["den","die","der"], why:"복수 3격 → den (+명사 -n: Kindern)"},
+     {q:"Ich danke ___ Lehrer. (der Lehrer)", opts:["dem", "den", "der"], why:"danken + 3격, 남성 → dem"},
+     {q:"Kennst du ___ Film schon? (der Film)", opts:["den", "dem", "das"], why:"4격 남성 → den"},
+     {q:"Das Fahrrad ___ Kindes ist kaputt. (das Kind)", opts:["des", "dem", "der"], why:"2격 중성 → des Kindes"},
+     {q:"Er hilft ___ Frau mit den Taschen. (die Frau)", opts:["der", "die", "dem"], why:"helfen + 3격, 여성 → der"},
+     {q:"Wir danken ___ Eltern. (복수)", opts:["den", "die", "der"], why:"복수 3격 → den Eltern"}
    ]},
   {id:"g17", title:"Wechselpräposition: 방향(4격) vs 위치(3격)", rule:"in·an·auf·über·unter·vor·hinter·neben·zwischen은 두 격을 다 쓴다.<br><mark>움직임·방향(wohin?) → 4격</mark> / <mark>위치·정지(wo?) → 3격</mark>.", tip:"★ 어디로? (wohin) → 4격(den/das/die)! ★ 어디에? (wo) → 3격(dem/dem/der)!",
    detail:"<b>같은 전치사, 격에 따라 뜻이 달라진다</b><br>· Ich gehe <mark>in den</mark> Park. (공원으로 — 방향 4격)<br>· Ich bin <mark>in dem</mark> Park. (공원에 — 위치 3격)<br><br><b>★ 판단법: 동사가 힌트다</b><br>· 움직여 가는 동사(gehen·fahren·legen·stellen·hängen 놓다) → <mark>4격</mark> (wohin?)<br>· 가만히 있는 동사(sein·bleiben·liegen·stehen·hängen 걸려있다) → <mark>3격</mark> (wo?)<br><br><b>자주 쓰는 축약</b><br>ins = in das · im = in dem · ans = an das · am = an dem<br><br><b>예문 비교</b><br>· Ich hänge das Bild <mark>an die</mark> Wand. (벽에 건다 — 4격)<br>· Das Bild hängt <mark>an der</mark> Wand. (벽에 걸려 있다 — 3격)<br><br><span class='warn'>주의:</span> 나머지 전치사는 격이 고정: mit·bei·zu → 항상 3격 / für·ohne·um → 항상 4격.",
@@ -154,7 +234,12 @@ const GRAMMAR = [
      {q:"Ich bin ___ der Schule. (위치)", opts:["in","in die","ins"], why:"학교에 있음 → in + 3격(der)"},
      {q:"Häng die Jacke ___ den Schrank! (넣다·방향)", opts:["in","im","in dem"], why:"옷장 안으로 → 방향 4격 den"},
      {q:"Das Auto steht ___ dem Haus. (정지)", opts:["vor","für","um"], why:"집 앞에 서 있음 → vor + 3격(dem)"},
-     {q:"Wir fahren ___ Wochenende ans Meer. (~에)", opts:["am","im","um"], why:"주말에 = am Wochenende (an dem)"}
+     {q:"Wir fahren ___ Wochenende ans Meer. (~에)", opts:["am","im","um"], why:"주말에 = am Wochenende (an dem)"},
+     {q:"Stell die Milch ___ Kühlschrank!", opts:["in den", "in dem", "im"], why:"stellen(놓다·방향) → in + 4격 den"},
+     {q:"Die Milch steht ___ Kühlschrank.", opts:["im", "in den", "ins"], why:"stehen(위치) → in dem = im"},
+     {q:"Wir gehen heute Abend ___ Kino.", opts:["ins", "im", "in"], why:"방향 → in das = ins Kino"},
+     {q:"Das Bild hängt ___ der Wand.", opts:["an", "auf", "in"], why:"벽에 걸려 있음(위치) → an + 3격"},
+     {q:"Leg dein Handy ___ den Tisch!", opts:["auf", "auf dem", "am"], why:"legen(놓다·방향) → auf + 4격 den"}
    ]},
   {id:"g18", title:"관계문 Relativsatz (der/den/dem/die)", rule:"명사를 뒤에서 설명하는 문장. 관계대명사는 <mark>앞 명사의 성·수</mark>를 따르고, <mark>격은 관계문 안에서의 역할</mark>로 정한다.<br>동사는 관계문 맨 끝!", tip:"★ 성·수는 앞 명사, 격은 관계문 속 역할! ★ 관계문 동사는 맨 끝!",
    detail:"<b>관계대명사 = 정관사와 거의 같은 모양</b><br>&nbsp;&nbsp;&nbsp;&nbsp;남성 / 여성 / 중성 / 복수<br>1격: der / die / das / die<br>3격: dem / der / dem / <span class='warn'>denen</span><br>4격: den / die / das / die<br><br><b>★ 격 정하는 법 (2단계)</b><br>① 성·수 → 앞의 명사를 본다<br>② 격 → 관계문 안에서 주어면 1격, 목적어면 4격, ~에게면 3격<br><br><b>예문</b><br>· Der Mann, <mark>der</mark> dort steht, ... (그 남자가 서 있다 — 주어 1격)<br>· Der Mann, <mark>den</mark> ich kenne, ... (내가 그 남자를 안다 — 목적어 4격)<br>· Der Mann, <mark>dem</mark> ich helfe, ... (내가 그에게 돕는다 — 3격)<br>· Die Frau, <mark>deren</mark> Auto ... (그녀의 차 — 2격)<br><br><span class='warn'>복수 3격만 예외:</span> denen (den 아님!)<br><br><b>전치사 + 관계대명사</b><br>Das ist der Freund, <mark>mit dem</mark> ich wohne. (그와 함께 산다)",
@@ -163,7 +248,12 @@ const GRAMMAR = [
      {q:"Das ist das Buch, ___ ich gekauft habe. (~를)", opts:["das","den","dem"], why:"중성 + 목적어(4격) → das"},
      {q:"Die Frau, ___ ich das Geld gab, ... (~에게)", opts:["der","die","dem"], why:"여성 + 3격(~에게) → der"},
      {q:"Der Freund, mit ___ ich wohne, ... (전치사 mit)", opts:["dem","den","der"], why:"mit는 3격, 남성 → dem"},
-     {q:"Die Kinder, ___ ich helfe, ... (복수 3격)", opts:["denen","den","die"], why:"복수 3격은 예외적으로 denen!"}
+     {q:"Die Kinder, ___ ich helfe, ... (복수 3격)", opts:["denen","den","die"], why:"복수 3격은 예외적으로 denen!"},
+     {q:"Die Frau, ___ dort wartet, ist meine Nachbarin.", opts:["die", "der", "das"], why:"여성 + 관계문 주어(1격) → die"},
+     {q:"Der Film, ___ wir gestern gesehen haben, war toll.", opts:["den", "der", "dem"], why:"남성 + 목적어(4격) → den"},
+     {q:"Das Kind, ___ ich geholfen habe, sagt danke.", opts:["dem", "das", "den"], why:"helfen + 3격, 중성 → dem"},
+     {q:"Die Kollegin, mit ___ ich arbeite, ist sehr nett.", opts:["der", "die", "dem"], why:"mit + 3격, 여성 → der"},
+     {q:"Die Leute, ___ hier wohnen, sind freundlich.", opts:["die", "denen", "der"], why:"복수 + 주어(1격) → die"}
    ]},
   {id:"g19", title:"수동태 Passiv (werden + 과거분사)", rule:"'누가 하느냐'보다 '무엇이 되느냐'가 중요할 때. 공식: <mark>werden + 과거분사(맨 끝)</mark>.<br>행위자는 von(사람)/durch(수단)로 덧붙인다.", tip:"★ werden이 보이고 문장 끝에 과거분사면 → 수동태! ★ 과거 수동은 wurde + 과거분사!",
    detail:"<b>능동 vs 수동</b><br>· 능동: Der Mechaniker repariert das Auto. (정비사가 차를 고친다)<br>· 수동: Das Auto <mark>wird</mark> (von dem Mechaniker) <mark>repariert</mark>. (차가 고쳐진다)<br><br><b>★ 시제별 형태</b><br>· 현재: Das Auto <mark>wird</mark> repariert.<br>· 과거: Das Auto <mark>wurde</mark> repariert.<br>· 현재완료: Das Auto <mark>ist</mark> repariert <mark>worden</mark>. (worden 주의!)<br><br><b>행위자 표시</b><br>· 사람 → von: Das Haus wird <mark>von</mark> Arbeitern gebaut.<br>· 수단·원인 → durch: Die Stadt wurde <mark>durch</mark> ein Feuer zerstört.<br><br><b>조동사 + 수동</b><br>Das Auto <mark>muss</mark> repariert <mark>werden</mark>. (고쳐져야 한다 — werden 원형이 끝)<br><br><span class='warn'>함정:</span> werden은 '~이 되다'(자동사)로도 쓰인다. 문장 끝 과거분사가 있어야 수동태!",
@@ -172,7 +262,12 @@ const GRAMMAR = [
      {q:"Das Haus ___ 1990 gebaut. (과거 수동)", opts:["wurde","wird","war"], why:"과거 수동 = wurde + gebaut"},
      {q:"Die Rechnung muss heute bezahlt ___. (조동사+수동)", opts:["werden","wird","worden"], why:"조동사 뒤 수동은 원형 werden이 맨 끝"},
      {q:"Das Problem wurde ___ einen Experten gelöst. (사람)", opts:["von","durch","mit"], why:"행위자가 사람 → von"},
-     {q:"Der Brief ist gestern geschrieben ___. (현재완료 수동)", opts:["worden","geworden","werden"], why:"완료 수동은 worden (geworden 아님!)"}
+     {q:"Der Brief ist gestern geschrieben ___. (현재완료 수동)", opts:["worden","geworden","werden"], why:"완료 수동은 worden (geworden 아님!)"},
+     {q:"In Deutschland ___ viel Brot gegessen.", opts:["wird", "ist", "hat"], why:"현재 수동 → wird + 과거분사"},
+     {q:"Die E-Mail ___ gestern geschickt.", opts:["wurde", "wird", "war"], why:"과거 수동 → wurde geschickt"},
+     {q:"Das Formular muss ___ werden.", opts:["ausgefüllt", "ausfüllen", "füllt aus"], why:"조동사 + 수동: 과거분사 + werden"},
+     {q:"Das Fenster ist ___ worden.", opts:["geöffnet", "öffnen", "öffnete"], why:"완료 수동: ist + 과거분사 + worden"},
+     {q:"Die Pizza wird ___ dem Lieferdienst gebracht.", opts:["von", "durch", "mit"], why:"행위자(사람·업체) → von"}
    ]},
   {id:"g20", title:"2격 Genitiv (~의) + wegen/trotz/während", rule:"소유·소속을 나타내는 격. 남성·중성은 <mark>-s/-es</mark>가 붙는다.<br>wegen(~때문에)·trotz(~에도)·während(~동안)·statt(~대신)는 2격을 지배한다.", tip:"★ 남성·중성 명사 끝에 -s! (des Mannes) ★ wegen·trotz·während가 보이면 → 2격!",
    detail:"<b>2격 관사 + 명사 어미</b><br>· 남성: <mark>des</mark> Mann<mark>es</mark> / 중성: <mark>des</mark> Kind<mark>es</mark> (명사에 -es/-s 붙음!)<br>· 여성: <mark>der</mark> Frau / 복수: <mark>der</mark> Kinder (명사 안 변함)<br><br><b>예문</b><br>· das Auto <mark>des</mark> Chef<mark>s</mark> (사장의 차)<br>· die Tür <mark>der</mark> Wohnung (집의 문)<br><br><b>★ 2격 지배 전치사 (시험 단골)</b><br>· <mark>wegen</mark> des Wetters (날씨 때문에)<br>· <mark>trotz</mark> des Regens (비에도 불구하고)<br>· <mark>während</mark> der Arbeit (일하는 동안)<br>· <mark>statt</mark> des Autos (차 대신)<br><br><b>회화 팁</b><br>말할 때는 von + 3격으로도 자주 쓴다: das Auto <mark>von dem</mark> Chef. 하지만 <span class='warn'>시험 Sprachbausteine는 2격을 정답으로 요구</span>한다.",
@@ -181,7 +276,12 @@ const GRAMMAR = [
      {q:"___ des schlechten Wetters bleiben wir zu Hause.", opts:["Wegen","Weil","Trotz"], why:"'~때문에' + 2격 → Wegen"},
      {q:"___ des Regens spielen wir draußen. (비에도 불구하고)", opts:["Trotz","Wegen","Während"], why:"'~에도 불구하고' + 2격 → Trotz"},
      {q:"Während ___ Arbeit darf man nicht rauchen. (여성)", opts:["der","des","dem"], why:"2격 여성 → der"},
-     {q:"Die Farbe ___ Hauses gefällt mir. (~의, 중성)", opts:["des","der","dem"], why:"2격 중성 → des (+ Haus-es)"}
+     {q:"Die Farbe ___ Hauses gefällt mir. (~의, 중성)", opts:["des","der","dem"], why:"2격 중성 → des (+ Haus-es)"},
+     {q:"Das ist die Meinung ___ Lehrers. (der Lehrer)", opts:["des", "der", "dem"], why:"2격 남성 → des Lehrers"},
+     {q:"___ der Prüfung darf man nicht sprechen.", opts:["Während", "Wegen", "Trotz"], why:"~동안 + 2격 → während"},
+     {q:"Die Farbe ___ Autos gefällt mir. (das Auto)", opts:["des", "der", "dem"], why:"2격 중성 → des Autos"},
+     {q:"___ der Kälte gehen wir spazieren.", opts:["Trotz", "Wegen", "Während"], why:"추운데도 불구하고 → trotz + 2격"},
+     {q:"Er kommt ___ des Staus zu spät.", opts:["wegen", "weil", "trotz"], why:"wegen + 2격 (weil은 문장을 이끄는 접속사!)"}
    ]},
   {id:"g21", title:"n-변화 명사 (der Junge → den Jungen)", rule:"일부 남성 명사는 <mark>1격 빼고 모든 격에서 -n/-en</mark>이 붙는다.<br>사람·직업·국적을 뜻하는 남성 명사가 많다.", tip:"★ Junge·Kunde·Kollege·Herr·Student·Mensch·Name → 1격 빼고 전부 -n!",
    detail:"<b>어떤 명사가 n-변화?</b><br>· -e로 끝나는 남성: der Junge · der Kunde · der Kollege · der Name · der Kunde<br>· 사람·직업·국적: der Student · der Tourist · der Journalist · der Nachbar<br>· 특수: der Herr(단수 -n, 복수 -en) · der Mensch · das Herz<br><br><b>★ 변화 예시 (der Kunde)</b><br>1격: der Kunde<br>4격: den <mark>Kunden</mark><br>3격: dem <mark>Kunden</mark><br>2격: des <mark>Kunden</mark><br><br><b>예문</b><br>· Ich kenne <mark>den Kollegen</mark>. (동료를 안다 — 4격)<br>· Ich helfe <mark>dem Studenten</mark>. (학생을 돕는다 — 3격)<br>· Kennst du <mark>diesen Herrn</mark>? (이 신사분)<br><br><span class='warn'>함정:</span> 1격 주어일 때는 -n이 없다! Der Student lernt. (O) / Den Student(X) → Den Studenten(O)",
@@ -190,7 +290,12 @@ const GRAMMAR = [
      {q:"Ich helfe ___. (der Student · ~에게)", opts:["dem Studenten","dem Student","den Studenten"], why:"n-변화 + 3격 → dem Studenten"},
      {q:"___ Junge spielt im Garten. (주어)", opts:["Der","Den","Dem"], why:"주어(1격)는 -n 없음 → Der Junge"},
      {q:"Kennst du diesen ___? (der Herr · ~를)", opts:["Herrn","Herr","Herren"], why:"Herr는 단수에서 -n → Herrn"},
-     {q:"Wir sprechen mit dem ___. (der Nachbar)", opts:["Nachbarn","Nachbar","Nachbaren"], why:"n-변화 + 3격 → Nachbarn"}
+     {q:"Wir sprechen mit dem ___. (der Nachbar)", opts:["Nachbarn","Nachbar","Nachbaren"], why:"n-변화 + 3격 → Nachbarn"},
+     {q:"Ich frage ___. (der Kollege)", opts:["den Kollegen", "dem Kollegen", "den Kollege"], why:"fragen + 4격, n-변화 → den Kollegen"},
+     {q:"Kennst du ___? (der Student)", opts:["den Studenten", "den Student", "dem Studenten"], why:"4격 + n-변화 → den Studenten"},
+     {q:"Wir haben mit dem ___ gesprochen. (der Junge)", opts:["Jungen", "Junge", "Junges"], why:"3격 n-변화 → dem Jungen"},
+     {q:"Ich suche ___ Müller. (der Herr)", opts:["Herrn", "Herr", "Herren"], why:"4격 단수 → Herrn Müller"},
+     {q:"Der Name ___ ist sehr lang. (der Kunde)", opts:["des Kunden", "des Kundes", "dem Kunden"], why:"2격 n-변화 → des Kunden (des Kundes 아님!)"}
    ]},
   {id:"g22", title:"Konjunktiv II 심화: wenn ... hätte, würde", rule:"'~라면 ~할 텐데'(비현실 가정). <mark>wenn절에 hätte/wäre/könnte</mark>, 주절에 <mark>würde + 원형</mark>.", tip:"★ '만약 ~라면 ~할 텐데'는 양쪽 다 접속법! ★ 주절은 보통 würde + 동사원형!",
    detail:"<b>비현실 가정 (지금 사실이 아닌 상상)</b><br>· <mark>Wenn ich Zeit hätte, würde ich reisen.</mark> (시간이 있다면 여행할 텐데 — 지금은 시간 없음)<br>· Wenn ich reich <mark>wäre</mark>, <mark>würde</mark> ich ein Haus kaufen.<br><br><b>★ 자주 쓰는 접속법 형태</b><br>· sein → wäre · haben → hätte · werden → würde<br>· können → könnte · müssen → müsste · sollen → sollte<br><br><b>würde vs 직접 접속법</b><br>대부분 동사는 <mark>würde + 원형</mark>으로: würde gehen · würde kaufen.<br>하지만 sein·haben·조동사는 würde 없이: wäre · hätte · könnte (würde sein X)<br><br><b>정중한 부탁에도 (3과 복습)</b><br>· <mark>Könnten</mark> Sie mir helfen? · Ich <mark>hätte</mark> gern einen Kaffee. · Es <mark>wäre</mark> nett, wenn ...<br><br><span class='warn'>함정:</span> würde와 wurde(실제로 ~되었다)는 점 두 개 차이! Ich wurde krank(아팠다) ≠ Ich würde(~할 텐데).",
@@ -199,7 +304,12 @@ const GRAMMAR = [
      {q:"Wenn ich reich wäre, ___ ich ein Haus kaufen.", opts:["würde","werde","wurde"], why:"주절 → würde + 원형"},
      {q:"___ Sie mir bitte helfen? (정중)", opts:["Könnten","Konnten","Können nicht"], why:"정중한 부탁 → Könnten"},
      {q:"Ich ___ gern ein Glas Wasser. (정중한 주문)", opts:["hätte","habe","hatte"], why:"공손한 희망 → hätte gern"},
-     {q:"An deiner Stelle ___ ich zum Arzt gehen. (내가 너라면)", opts:["würde","werde","wurde"], why:"조언 = 비현실 → würde gehen"}
+     {q:"An deiner Stelle ___ ich zum Arzt gehen. (내가 너라면)", opts:["würde","werde","wurde"], why:"조언 = 비현실 → würde gehen"},
+     {q:"Wenn ich mehr Zeit ___, würde ich Sport machen.", opts:["hätte", "habe", "hatte"], why:"비현실 가정 → hätte"},
+     {q:"Wenn das Wetter schön ___, würden wir grillen.", opts:["wäre", "war", "ist"], why:"가정 → wäre"},
+     {q:"Ich ___ heute lieber zu Hause bleiben.", opts:["würde", "werde", "wurde"], why:"희망 → würde + 원형"},
+     {q:"___ ich Sie kurz etwas fragen?", opts:["Dürfte", "Durfte", "Darf nicht"], why:"아주 정중한 부탁 → Dürfte ich ...?"},
+     {q:"Es wäre schön, wenn du mitkommen ___.", opts:["könntest", "konntest", "kannst"], why:"가정문 → könntest"}
    ]},
   {id:"g23", title:"zu 부정사: um/ohne/statt ... zu + 원형", rule:"<mark>zu + 동사원형</mark>은 문장을 잇는다.<br>um...zu(~하려고) · ohne...zu(~하지 않고) · statt...zu(~하는 대신).", tip:"★ zu + 원형이 보이면 앞에 um/ohne/statt 중 하나! ★ 분리동사는 zu가 사이에: aufzustehen!",
    detail:"<b>세 가지 zu 구문</b><br>· <mark>um ... zu</mark> (~하기 위해): Ich lerne, <mark>um</mark> die Prüfung <mark>zu</mark> bestehen.<br>· <mark>ohne ... zu</mark> (~하지 않고): Er ging, <mark>ohne</mark> etwas <mark>zu</mark> sagen. (아무 말 없이 갔다)<br>· <mark>statt ... zu</mark> (~하는 대신): <mark>Statt</mark> zu arbeiten, schläft er. (일하는 대신 잔다)<br><br><b>★ 분리동사 주의</b><br>zu가 접두사와 어간 <mark>사이에</mark> 들어간다: auf<mark>zu</mark>stehen · ein<mark>zu</mark>kaufen · an<mark>zu</mark>rufen<br><br><b>zu가 필요 없는 동사 (조동사류)</b><br>können·müssen·wollen·sollen·dürfen·mögen 뒤 + 원형만: Ich muss <span class='warn'>gehen</span> (zu 없음!)<br>그 외 brauchen은 nur/kein과 함께 zu: Du brauchst nicht <mark>zu</mark> kommen.<br><br><b>일반 zu 부정사</b><br>Es ist wichtig, gut <mark>zu</mark> schlafen. · Ich habe vor, Deutsch <mark>zu</mark> lernen. (~할 계획이다)",
@@ -208,6 +318,11 @@ const GRAMMAR = [
      {q:"Er ging weg, ___ zu bezahlen. (~하지 않고)", opts:["ohne","um","statt"], why:"'~하지 않고' → ohne ... zu"},
      {q:"___ zu arbeiten, spielt er den ganzen Tag. (~대신)", opts:["Statt","Um","Ohne"], why:"'~하는 대신' → statt ... zu"},
      {q:"Vergiss nicht, früh ___! (분리동사 aufstehen)", opts:["aufzustehen","zu aufstehen","aufstehen zu"], why:"분리동사는 zu가 사이에: aufzustehen"},
-     {q:"Du brauchst heute nicht ___. (오지 않아도 된다)", opts:["zu kommen","kommen","zu kommst"], why:"brauchen + nicht → zu + 원형"}
+     {q:"Du brauchst heute nicht ___. (오지 않아도 된다)", opts:["zu kommen","kommen","zu kommst"], why:"brauchen + nicht → zu + 원형"},
+     {q:"Es macht Spaß, Deutsch ___ lernen.", opts:["zu", "um", "für"], why:"일반 zu 부정사: Deutsch zu lernen"},
+     {q:"Er ging nach Hause, ___ sich zu verabschieden.", opts:["ohne", "um", "statt"], why:"인사도 하지 않고 → ohne ... zu"},
+     {q:"Ich habe vor, im Sommer nach Korea ___.", opts:["zu fliegen", "fliegen", "geflogen"], why:"vorhaben(계획하다) + zu 부정사"},
+     {q:"Vergiss nicht, die Tür ___! (abschließen)", opts:["abzuschließen", "zu abschließen", "abschließen zu"], why:"분리동사: 접두사 + zu + 어간 → abzuschließen"},
+     {q:"Du musst heute nicht ___. (kommen)", opts:["kommen", "zu kommen", "gekommen"], why:"조동사(müssen) 뒤에는 zu 없이 원형!"}
    ]},
 ];
