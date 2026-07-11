@@ -122,6 +122,27 @@ function sfx(ok) {
   } catch {}
 }
 
+// 문장 이해용 단어 뜻 칩 (관사·대명사 등 정답 힌트 단어는 제외)
+const GLOSS_STOP = new Set(("der die das den dem des ein eine einen einem einer eines "
+  + "kein keine keinen keinem keiner keines mein meine meinen meinem meiner meines "
+  + "dein deine deinen deinem deiner deines sein seine seinen seinem seiner seines "
+  + "ihre ihren ihrem ihrer unser unsere unseren unserem unserer eure euren eurem euer "
+  + "ich du er es sie wir mich dich ihn uns euch mir dir ihm ihnen ihr").split(" "));
+function glossHTML(sentence) {
+  const bare = sentence.replace(/___/g, " ").replace(/\([^)]*\)/g, " ");
+  const seen = new Set(), chips = [];
+  bare.split(/[^A-Za-zÄÖÜäöüß]+/).forEach(w => {
+    if (w.length < 2) return;
+    const lw = w.toLowerCase();
+    if (GLOSS_STOP.has(lw) || seen.has(lw)) return;
+    const g = (typeof GLOSS !== "undefined" && GLOSS[lw]) || null;
+    if (!g) return;
+    seen.add(lw);
+    chips.push(`<span class="gloss-chip"><b>${w}</b> ${g}</span>`);
+  });
+  return chips.length ? `<div class="gloss-box">${chips.join("")}</div>` : "";
+}
+
 // 세션 상단바 (좌: 뒤로+제목, 우: 진행표시)
 function sesTop(title, right) {
   return `<div class="session-top">
@@ -820,6 +841,7 @@ function nextDeckQuizQ() {
     ${sesTop(dqz.topic.title, `문제 ${dqz.pos + 1} / ${dqz.list.length}`)}
     <div class="quiz-card">
       <div class="quiz-q">${item.q.replace("___", `<span class="gap">___</span>`)}</div>
+      ${glossHTML(item.q)}
       <div class="quiz-opts">
         ${opts.map((o, oi) => `<button class="opt" data-i="${oi}"><span class="abc">${abc[oi]}</span>${o.t}</button>`).join("")}
       </div>
@@ -1160,13 +1182,14 @@ function nextQuizQ() {
     [opts[i], opts[j]] = [opts[j], opts[i]];
   }
   const abc = ["a", "b", "c"];
-  const label = qz.mode === "wrong" ? "오답 다시 풀기" : qz.mode === "exam" ? "전 범위 모의고사" : qz.mode === "mixed" ? "실전 모의"
-    : (qz.lesson ? qz.lesson.title + " + 복습" : g.title);
+  // 상단에 문법 주제를 노출하면 그것만 보고 답을 찍으므로 항상 중립 라벨 사용
+  const label = qz.mode === "wrong" ? "오답 다시 풀기" : qz.mode === "exam" ? "전 범위 모의고사" : qz.mode === "mixed" ? "실전 모의" : "문법 문제";
   backFn = renderGrammar;
   screen.innerHTML = `
     ${sesTop(label, `문제 ${qz.pos + 1} / ${qz.list.length}`)}
     <div class="quiz-card">
       <div class="quiz-q">${item.q.replace("___", `<span class="gap">___</span>`)}</div>
+      ${glossHTML(item.q)}
       <div class="quiz-opts">
         ${opts.map((o, i) => `<button class="opt" data-i="${i}"><span class="abc">${abc[i]}</span>${o.t}</button>`).join("")}
       </div>
