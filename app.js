@@ -244,90 +244,140 @@ function renderHome() {
 
 // ---------- 단어 세션 ----------
 let vq = [];   // 세션 큐: {id, isNew, introPhase}
+// 4단계 플래시카드: ① 훑기(독+한) → ② 뜻 떠올리기(독→한) → ③ 단어 떠올리기(한→독) → ④ 시험(모르는것만 반복)
+let vs = null;   // {ids, phase, queue}
+const PHASE_INFO = {
+  1: ["1단계 · 훑어보기", "오늘의 단어를 <b>독일어와 뜻을 함께</b> 쭉 넘기며 눈에 익혀요."],
+  2: ["2단계 · 뜻 떠올리기", "독일어를 보고 <b>한국어 뜻</b>을 떠올린 뒤, 탭해서 확인하세요."],
+  3: ["3단계 · 단어 떠올리기", "한국어를 보고 <b>독일어 단어</b>를 떠올린 뒤, 탭해서 확인하세요."],
+  4: ["4단계 · 시험", "이제 시험이에요. <b>모르는 단어만</b> 계속 반복되고, 다 맞히면 끝나요."],
+};
+
 function startVocabSession() {
-  const due = dueReviews();
-  const news = newAvailable();
-  vq = [
-    ...due.map(id => ({id, isNew: false})),
-    ...news.map(id => ({id, isNew: true, introPhase: true})),
-  ];
-  if (vq.length === 0) {
+  const ids = [...new Set([...dueReviews(), ...newAvailable()])];
+  if (ids.length === 0) {
     renderDone("오늘 단어 학습을 모두 끝냈어요!", "내일 복습 카드가 다시 나와요.", null, vocabExtraBtn());
     return;
   }
-  nextVocabCard();
+  // 새 단어를 오늘 배운 것으로 등록
+  ids.forEach(id => {
+    if (!S.srs[id]) S.srs[id] = {b: 0, due: today(), intro: today()};
+    if (!S.introduced.includes(id)) S.introduced.push(id);
+  });
+  save();
+  vs = {ids, phase: 1, queue: shuffle(ids.slice())};
+  renderPhaseStart();
+}
+
+function renderPhaseStart() {
+  backFn = () => setTab("vocab");
+  const [title, desc] = PHASE_INFO[vs.phase];
+  screen.innerHTML = `
+    ${sesTop("단어 학습", `${vs.ids.length}단어`)}
+    <div class="panel phase-intro">
+      <div class="phase-badge">${vs.phase} / 4</div>
+      <h2 class="phase-title">${title}</h2>
+      <p class="sub">${desc}</p>
+      <button class="btn big" id="pstart">시작하기 →</button>
+    </div>`;
+  wireBack();
+  document.getElementById("pstart").addEventListener("click", () => { vs.queue = shuffle(vs.ids.slice()); nextVocabCard(); });
 }
 
 function nextVocabCard() {
-  if (vq.length === 0) { markStudied(); renderDone("단어 세션 완료", "이제 오늘의 문법을 풀어볼까요?", "grammar", vocabExtraBtn()); return; }
-  const item = vq[0];
-  const w = VOCAB.find(v => v.id === item.id);
-  const total = vq.length;
-  const isIntro = item.isNew && item.introPhase;
-  const subLine = w.pl ? `<div class="plural">복수: ${w.pl}</div>` : w.gr ? `<div class="plural">${w.gr}</div>` : "";
+  if (!vs) return;
+  if (vs.queue.length === 0) {
+    if (vs.phase < 4) { vs.phase++; renderPhaseStart(); return; }
+    markStudied();
+    renderDone("단어 완료!", "오늘 단어를 4단계로 다 익혔어요. 이제 문법을 풀어볼까요?", "grammar", vocabExtraBtn());
+    return;
+  }
+  renderVocabCard();
+}
+
+function gradeVocab4(id, ok) {
+  const rec = S.srs[id] || (S.srs[id] = {b: 0, due: today(), intro: today()});
+  if (ok) { rec.b = Math.min(rec.b + 1, SRS_INTERVALS.length - 1); rec.due = addDays(today(), SRS_INTERVALS[rec.b]); }
+  else { rec.b = 1; rec.due = today(); }
+  save();
+}
+
+function renderVocabCard() {
+  const id = vs.queue[0];
+  const w = VOCAB.find(v => v.id === id);
+  const phase = vs.phase;
+  const browse = phase === 1;
+  const total = vs.queue.length;
+  const sub = w.pl ? `<div class="plural">복수: ${w.pl}</div>` : w.gr ? `<div class="plural">${w.gr}</div>` : "";
+  const exHTML = `<div class="example">${w.ex}<span class="exko">${w.exKo}</span></div>`;
   backFn = () => setTab("vocab");
 
+  let promptHTML, backHTML;
+  if (browse) {
+    promptHTML = `<div class="de">${w.de}</div>${sub}<div class="ko">${w.ko}</div>${exHTML}`;
+    backHTML = "";
+  } else if (phase === 3) {
+    promptHTML = `<div class="ko prompt-ko">${w.ko}</div>`;
+    backHTML = `<div class="de">${w.de}</div>${sub}<div class="example" style="margin-top:10px">${w.ex}<span class="exko">${w.exKo}</span></div>`;
+  } else { // phase 2, 4
+    promptHTML = `<div class="de">${w.de}</div>${sub}`;
+    backHTML = `<div class="ko">${w.ko}</div><div class="example" style="margin-top:10px">${w.ex}<span class="exko">${w.exKo}</span></div>`;
+  }
+
+  const [ptitle] = PHASE_INFO[phase];
   screen.innerHTML = `
-    ${sesTop("단어 학습", `남은 카드 ${total}장`)}
+    ${sesTop(ptitle, `남은 ${total}장`)}
     <div class="card-stage">
       <div class="flashcard swipeable" id="card">
-        ${isIntro ? `
-          <span class="badge-new">새 단어</span>
-          <div class="de">${w.de}</div>
-          ${subLine}
-          <div class="ko">${w.ko}</div>
-          <div class="example">${w.ex}<span class="exko">${w.exKo}</span></div>` : `
-          <div class="de">${w.de}</div>
-          ${subLine}
-          <div id="back" style="display:none">
-            <div class="ko">${w.ko}</div>
-            <div class="example" style="margin-top:10px">${w.ex}<span class="exko">${w.exKo}</span></div>
-          </div>
-          <div class="hint" id="hint">탭하면 뜻이 보여요</div>`}
+        ${promptHTML}
+        ${browse ? "" : `<div id="back" style="display:none">${backHTML}</div><div class="hint" id="hint">탭하면 ${phase === 3 ? "단어" : "뜻"}가 보여요</div>`}
         <button class="tts-btn" id="tts">발음 듣기</button>
       </div>
-      <div class="swipe-tag left" id="tagL">몰라요</div>
-      <div class="swipe-tag right" id="tagR">${isIntro ? "외웠어요" : "알아요"}</div>
+      <div class="swipe-tag left" id="tagL">${browse ? "이전" : "몰라요"}</div>
+      <div class="swipe-tag right" id="tagR">${browse ? "다음" : "알아요"}</div>
     </div>
-    ${isIntro
-      ? `<div class="grade-row"><button class="g-good" id="good">외웠어요 →</button></div>`
+    ${browse
+      ? `<div class="grade-row"><button class="g-good" id="next">다음 →</button></div>`
       : `<div class="grade-row"><button class="g-again" id="again">몰라요</button><button class="g-good" id="good">알아요</button></div>`}
-    <p class="hint-line">${isIntro ? "오른쪽으로 밀어서 넘기세요" : "오른쪽 = 알아요 · 왼쪽 = 몰라요"}</p>`;
+    <p class="hint-line">${browse ? "밀거나 눌러서 넘기세요" : "오른쪽 = 알아요 · 왼쪽 = 몰라요"}</p>`;
 
   wireBack();
   const card = document.getElementById("card");
   const tagL = document.getElementById("tagL");
   const tagR = document.getElementById("tagR");
-  let flipped = isIntro;
+  let flipped = browse;
 
   const flip = () => {
     if (flipped) return;
     flipped = true;
     document.getElementById("back").style.display = "block";
     document.getElementById("hint").style.display = "none";
+    if (phase === 3) speak(w.de);   // 한→독: 답이 나올 때 발음
   };
 
-  const finish = (ok) => {
-    // 카드를 옆으로 날리고 다음 카드로
+  const advance = () => { vs.queue.shift(); nextVocabCard(); };
+  const answer = (ok) => {
     card.style.transition = "transform 0.18s ease-out, opacity 0.18s";
     card.style.transform = `translateX(${ok ? 480 : -480}px) rotate(${ok ? 18 : -18}deg)`;
     card.style.opacity = "0";
     setTimeout(() => {
-      if (isIntro) {
-        vq.shift();
-        vq.push({id: item.id, isNew: true, introPhase: false});
-        nextVocabCard();
+      if (browse) { advance(); return; }
+      if (phase === 4) {
+        gradeVocab4(id, ok);
+        if (ok) vs.queue.shift();
+        else vs.queue.push(vs.queue.shift());   // 모르면 뒤로 다시 (다 맞힐 때까지)
       } else {
-        grade(item, ok);
+        vs.queue.shift();   // 2·3단계는 한 바퀴만
       }
+      nextVocabCard();
     }, 150);
   };
 
-  // 스와이프 (터치+마우스 공용)
-  let startX = null, startY = null, dx = 0, moved = false;
+  // 스와이프
+  let startX = null, dx = 0, moved = false;
   card.addEventListener("pointerdown", e => {
     if (e.target.id === "tts") return;
-    startX = e.clientX; startY = e.clientY; dx = 0; moved = false;
+    startX = e.clientX; dx = 0; moved = false;
     try { card.setPointerCapture(e.pointerId); } catch {}
     card.style.transition = "none";
   });
@@ -336,48 +386,34 @@ function nextVocabCard() {
     dx = e.clientX - startX;
     if (Math.abs(dx) > 8) moved = true;
     card.style.transform = `translateX(${dx}px) rotate(${dx / 22}deg)`;
-    tagR.style.opacity = dx > 30 && (flipped || isIntro || dx > 0) ? Math.min(1, dx / 100) : 0;
+    tagR.style.opacity = dx > 30 ? Math.min(1, dx / 100) : 0;
     tagL.style.opacity = dx < -30 ? Math.min(1, -dx / 100) : 0;
   });
   const release = () => {
     if (startX === null) return;
     tagL.style.opacity = 0; tagR.style.opacity = 0;
-    if (dx > 90) { finish(true); }
-    else if (dx < -90 && !isIntro) { finish(false); }
-    else {
-      card.style.transition = "transform 0.15s ease-out";
-      card.style.transform = "";
-      if (!moved) flip(); // 살짝 탭 = 뒤집기
+    const swiped = Math.abs(dx) > 90;
+    if (browse && swiped) { startX = null; advance(); return; }
+    if (!browse && swiped) {
+      if (!flipped) { flip(); card.style.transition = "transform 0.15s"; card.style.transform = ""; startX = null; return; }
+      startX = null; answer(dx > 0); return;
     }
+    card.style.transition = "transform 0.15s ease-out";
+    card.style.transform = "";
+    if (!moved && !browse) flip();
     startX = null;
   };
   card.addEventListener("pointerup", release);
   card.addEventListener("pointercancel", release);
 
-  document.getElementById("tts").addEventListener("click", e => { e.stopPropagation(); speak(isIntro ? w.de + ". " + w.ex : w.de); });
-  speak(w.de);
+  document.getElementById("tts").addEventListener("click", e => { e.stopPropagation(); speak(w.de); });
+  if (phase !== 3) speak(w.de);
+  const nextBtn = document.getElementById("next");
+  if (nextBtn) nextBtn.addEventListener("click", advance);
   const againBtn = document.getElementById("again");
-  if (againBtn) againBtn.addEventListener("click", () => finish(false));
-  document.getElementById("good").addEventListener("click", () => finish(true));
-}
-
-function grade(item, ok) {
-  const id = item.id;
-  if (!S.srs[id]) S.srs[id] = {b: 0, due: today(), intro: today()};
-  if (!S.introduced.includes(id)) S.introduced.push(id);
-  const rec = S.srs[id];
-  if (ok) {
-    rec.b = Math.min(rec.b + 1, SRS_INTERVALS.length - 1);
-    rec.due = addDays(today(), SRS_INTERVALS[rec.b]);
-    vq.shift();
-  } else {
-    rec.b = 1;
-    rec.due = today();
-    // 틀린 카드는 세션 뒤로 다시
-    vq.push(vq.shift());
-  }
-  save();
-  nextVocabCard();
+  if (againBtn) againBtn.addEventListener("click", () => { if (flipped) answer(false); else flip(); });
+  const goodBtn = document.getElementById("good");
+  if (goodBtn) goodBtn.addEventListener("click", () => { if (flipped) answer(true); else flip(); });
 }
 
 function vocabExtraBtn() {
@@ -960,7 +996,16 @@ function renderGrammar() {
   const st = grammarStatus();
   const wrongN = (S.wrongQ || []).length;
   const doneN = S.grammarDone.length;
+  const allDone = doneN >= GRAMMAR.length;
   screen.innerHTML = `
+    ${allDone ? `
+    <div class="panel exam-panel">
+      <div class="exam-badge">전 범위</div>
+      <h2 style="color:var(--ink);text-transform:none;font-size:1.15rem">모의고사 모드</h2>
+      <p class="sub">27개 레슨을 모두 끝냈어요! 이제 <b>전 범위 20문제</b>가 시험처럼 무작위로 나와요. 원하는 만큼 계속 돌릴 수 있어요.</p>
+      <button class="btn big" id="startexam">전 범위 모의고사 (20문제)</button>
+      <button class="btn big secondary" id="startexam10">빠르게 (10문제)</button>
+    </div>` : `
     <div class="panel">
       <h2>오늘의 문법</h2>
       <div class="task-row">
@@ -986,7 +1031,7 @@ function renderGrammar() {
         </div>
         <button class="btn secondary" id="startmixed">시작</button>
       </div>
-    </div>
+    </div>`}
     <div class="panel">
       <h2>문법 전체 보기 · ${doneN}/${GRAMMAR.length} 완료</h2>
       <div class="gram-list">
@@ -1009,20 +1054,26 @@ function renderGrammar() {
   const sw = document.getElementById("startwrong");
   if (sw) sw.addEventListener("click", startWrongQuiz);
   const sm = document.getElementById("startmixed");
-  if (sm) sm.addEventListener("click", startMixedQuiz);
+  if (sm) sm.addEventListener("click", () => startMixedQuiz(10));
+  const se = document.getElementById("startexam");
+  if (se) se.addEventListener("click", () => startMixedQuiz(20));
+  const se10 = document.getElementById("startexam10");
+  if (se10) se10.addEventListener("click", () => startMixedQuiz(10));
   screen.querySelectorAll("[data-gid]").forEach(b => b.addEventListener("click", () => renderGrammarDetail(b.dataset.gid)));
 }
 
-function startMixedQuiz() {
-  // 배운 레슨(없으면 전체)에서 문제 풀을 만들어 10개 무작위 출제
+function startMixedQuiz(count) {
+  count = count || 10;
+  // 전 범위 완료 시엔 27개 전체에서, 아니면 배운 레슨에서 무작위 출제
+  const allDone = S.grammarDone.length >= GRAMMAR.length;
+  const source = (allDone || S.grammarDone.length === 0)
+    ? GRAMMAR
+    : GRAMMAR.filter(g => S.grammarDone.includes(g.id));
   const pool = [];
-  const source = S.grammarDone.length > 0
-    ? GRAMMAR.filter(g => S.grammarDone.includes(g.id))
-    : GRAMMAR;
   source.forEach(g => g.quiz.forEach((q, i) => pool.push({g, qi: i})));
-  const picked = shuffle(pool).slice(0, 10);
+  const picked = shuffle(pool).slice(0, count);
   if (picked.length === 0) { renderGrammar(); return; }
-  qz = {list: picked, pos: 0, correct: 0, mode: "mixed", lesson: null};
+  qz = {list: picked, pos: 0, correct: 0, mode: allDone ? "exam" : "mixed", lesson: null};
   nextQuizQ();
 }
 
@@ -1109,7 +1160,7 @@ function nextQuizQ() {
     [opts[i], opts[j]] = [opts[j], opts[i]];
   }
   const abc = ["a", "b", "c"];
-  const label = qz.mode === "wrong" ? "오답 다시 풀기" : qz.mode === "mixed" ? "실전 모의"
+  const label = qz.mode === "wrong" ? "오답 다시 풀기" : qz.mode === "exam" ? "전 범위 모의고사" : qz.mode === "mixed" ? "실전 모의"
     : (qz.lesson ? qz.lesson.title + " + 복습" : g.title);
   backFn = renderGrammar;
   screen.innerHTML = `
@@ -1193,12 +1244,14 @@ function finishQuiz() {
       remain === 0 ? "오늘 틀린 문제를 전부 맞혔어요." : "아직 틀리는 문제는 바로 한 번 더 돌 수 있어요.",
       null,
       remain > 0 ? {label: `남은 오답 ${remain}개 다시 풀기`, fn: startWrongQuiz} : null);
-  } else if (qz.mode === "mixed") {
-    const score = Math.round(qz.correct / qz.list.length * 100);
-    renderDone(`실전 모의 결과 · ${qz.correct} / ${qz.list.length} (${score}점)`,
+  } else if (qz.mode === "mixed" || qz.mode === "exam") {
+    const n = qz.list.length;
+    const score = Math.round(qz.correct / n * 100);
+    const isExam = qz.mode === "exam";
+    renderDone(`${isExam ? "모의고사" : "실전 모의"} 결과 · ${qz.correct} / ${n} (${score}점)`,
       score >= 60 ? "telc 합격선(60%)을 넘겼어요!" : "아직 60% 아래예요. 오답을 복습해봐요.",
       null,
-      {label: "다시 섞어서 풀기", fn: startMixedQuiz});
+      {label: isExam ? "전 범위 다시 (20문제)" : "다시 섞어서 풀기", fn: () => startMixedQuiz(isExam ? 20 : 10)});
   } else {
     renderDone(`복습 완료 · ${qz.correct} / ${qz.list.length} 정답`, qz.lesson.title, null,
       {label: "문법 전체 목록으로", fn: renderGrammar});
