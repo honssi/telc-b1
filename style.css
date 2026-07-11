@@ -218,6 +218,25 @@ body {
   margin-bottom: 10px;
 }
 
+/* 문장 이해용 단어 뜻 칩 */
+.gloss-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+.gloss-chip {
+  font-size: 0.82rem;
+  color: var(--sub);
+  background: var(--soft);
+  border-radius: 8px;
+  padding: 4px 9px;
+  line-height: 1.35;
+}
+.gloss-chip b { color: var(--ink); font-weight: 700; margin-right: 3px; }
+
 .card-stage { position: relative; }
 .flashcard.swipeable {
   touch-action: pan-y;
