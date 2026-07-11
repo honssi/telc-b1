@@ -1149,14 +1149,20 @@ function renderGrammarDetail(gid, backToLesson) {
 }
 
 function startQuiz(g, mode) {
-  // 이번 레슨 10문제 + 이전에 배운 레슨에서 복습 5문제를 섞어서 출제
-  // (한 문법만 연달아 나오면 패턴으로 답을 찍게 되니까)
-  const list = g.quiz.map((q, i) => ({g, qi: i}));
+  // 뒤로 갈수록 한 주제만 반복되면 외워서 찍게 되므로,
+  // 이번 레슨은 6문제만 내고 나머지 9문제는 '그동안 배운 다른 레슨'에서 섞어 낸다.
+  if (S.grammarDone.length === 0) {
+    // 1과: 아직 쌓인 히스토리가 없음 → 이 레슨 10문제
+    qz = {list: shuffle(g.quiz.map((q, i) => ({g, qi: i}))), pos: 0, correct: 0, mode, lesson: g};
+    nextQuizQ();
+    return;
+  }
+  const lessonQs = shuffle(g.quiz.map((q, i) => ({g, qi: i}))).slice(0, 6);
   const reviewPool = [];
   GRAMMAR.filter(x => x.id !== g.id && S.grammarDone.includes(x.id))
     .forEach(x => x.quiz.forEach((q, i) => reviewPool.push({g: x, qi: i})));
-  const review = shuffle(reviewPool).slice(0, 5);
-  qz = {list: shuffle([...list, ...review]), pos: 0, correct: 0, mode, lesson: g};
+  const fill = shuffle(reviewPool).slice(0, 9);
+  qz = {list: shuffle([...lessonQs, ...fill]), pos: 0, correct: 0, mode, lesson: g};
   nextQuizQ();
 }
 
