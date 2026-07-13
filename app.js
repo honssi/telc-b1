@@ -578,13 +578,18 @@ function pickDistractors(w, d) {
 
 let vt = null;
 function startVocabTest(dir) {
-  // 오늘 공부한 단어는 전부 출제 + 이전에 배운 단어 10개를 복습으로 섞음
-  const todayIds = todaysWordIds();
-  let pool = todayIds.map(id => VOCAB.find(v => v.id === id)).filter(Boolean);
-  const older = shuffle(
-    VOCAB.filter(v => S.introduced.includes(v.id) && !todayIds.includes(v.id))
-  ).slice(0, 10);
-  pool = [...pool, ...older];
+  // 오늘 '새로 배운' 단어만 전부 출제 + 이전에 배운(복습) 단어는 최대 10개만 섞음
+  const t = today();
+  const newTodayIds = S.introduced.filter(id => S.srs[id] && S.srs[id].intro === t);
+  const newWords = newTodayIds.map(id => VOCAB.find(v => v.id === id)).filter(Boolean);
+
+  // 복습 후보: 복습 예정(due) 우선, 그다음 예전에 배운 단어 — 합쳐서 10개 이내
+  const dueOlder = dueReviews().filter(id => !newTodayIds.includes(id));
+  const otherOlder = VOCAB.filter(v => S.introduced.includes(v.id) && !newTodayIds.includes(v.id)).map(v => v.id);
+  const olderIds = [...new Set([...shuffle(dueOlder), ...shuffle(otherOlder)])].slice(0, 10);
+  const older = olderIds.map(id => VOCAB.find(v => v.id === id)).filter(Boolean);
+
+  let pool = [...newWords, ...older];
   if (pool.length < 4) pool = VOCAB.filter(v => S.introduced.includes(v.id));
   if (pool.length < 4) pool = [...VOCAB].slice(0, 20);
   const qs = shuffle([...new Set(pool)]);
